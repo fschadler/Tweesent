@@ -2,8 +2,10 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as sia
 from googletrans import Translator
 import tweepy
 import wordcloud
+import numpy as np
+import pandas as pd
 
-consumer_key = "LEZ6shUvjCPx12e9DwMtPw1uR"
+consumer_key = "LEZ6shUvjCPx12e9DwMtPw1uR"      #keys Florin
 consumer_secret = "TAVTA300b55zdzHdf9qGSw8xEMqHHELZuTjVOdfQnCO6Kof6yH"
 access_token = "807738825988575232-eHZC9kiBGOcI8g6CIf5rVvuDZr4bNC0"
 access_token_secret = "Pa90jR4QtIogqm3GWWT7riK0UoDi8SHJFGr4yIXbBfLs4"
@@ -43,7 +45,7 @@ def list_tweets(user_id, count, prt=False):
         return tw
 
 def remove_pattern(input_txt, pattern):
-    r = re.finall(pattern, input_txt)
+    r = re.findall(pattern, input_txt)
     for i in r:
         input_txt = re.sub(i, "", input_txt)
     return input_txt
@@ -63,27 +65,14 @@ return lst
 def word_cloud(wd_list):
     stopwords = set(STOPWORDS)
     all_words = ' '.join([text for text in wd_list])
-    wordcloud = WordCloud(
-        background_color='white',
-        stopwords=stopwords,
-        width=1600,
-        height=800,
-        random_state=21,
-        colormap='jet',
-        max_words=50,
-        max_font_size=200).generate(all_words)
+    wordcloud = WordCloud(background_color='white',stopwords=stopwords,width=1600,height=800,random_state=21,colormap='jet',max_words=50,max_font_size=200).generate(all_words)
     plt.figure(figsize=(12, 10))
     plt.axis('off')
     plt.imshow(wordcloud, interpolation="bilinear");
     
 #stream listener
 
-def twitter_stream_listener(file_name,
-                            filter_track,
-                            follow=None,
-                            locations=None,
-                            languages=None,
-                            time_limit=20):
+def twitter_stream_listener(file_name,filter_track,follow=None,locations=None,languages=None,time_limit=20):
     class CustomStreamListener(tweepy.StreamListener):
         def __init__(self, time_limit):
             self.start_time = time.time()
@@ -116,18 +105,11 @@ def twitter_stream_listener(file_name,
             print('Timeout...')
             return True  # Don't kill the stream
     # Writing csv titles
-    print(
-        '\n[INFO] Open file: [{}] and starting {} seconds of streaming for {}\n'
-        .format(file_name, time_limit, filter_track))
+    print('\n[INFO] Open file: [{}] and starting {} seconds of streaming for {}\n'.format(file_name, time_limit, filter_track))
     with open(file_name, 'w') as f:
         writer = csv.writer(f)
         writer.writerow(['author', 'date', 'text'])
     streamingAPI = tweepy.streaming.Stream(
         auth, CustomStreamListener(time_limit=time_limit))
-    streamingAPI.filter(
-        track=filter_track,
-        follow=follow,
-        locations=locations,
-        languages=languages,
-    )
+    streamingAPI.filter(track=filter_track,follow=follow,locations=locations,languages=languages)
     f.close()
