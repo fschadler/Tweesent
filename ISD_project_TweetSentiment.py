@@ -28,7 +28,7 @@ def sentiment_scores(text, engl=True):
     compound = sentiment_score["compound"]
     if compound >= 0.05:
         return 1
-    elif (compound > -0.05) and (compund < 0.05):
+    elif (compound > -0.05) and (compound < 0.05):
         return 0
     else:
         return -1
