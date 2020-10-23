@@ -12,6 +12,8 @@ import pandas as pd
 import re
 
 # User Input: Defines the search term and amount of Tweets that shall be analyzed.
+
+######  Add predefined # infront of user Input, but if User manually adds # remove it "If str contains # remove "#""
 hash_tag_list = input("Enter keyword/hashtag: ")
 num_terms = input("Enter how many Tweets should be included: ")
 
