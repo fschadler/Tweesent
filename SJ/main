@@ -26,6 +26,7 @@ class TwitterClient():
     def get_twitter_client_api(self):
         return self.twitter_client
 
+
 # TWITTER AUTHENTICATOR
 """
 Uses twitter_credentials.py to get access to API 
@@ -40,7 +41,7 @@ class TwitterAuthenticator():
         return auth
 
 
-#TWITTER STREAMER
+# TWITTER STREAMER
 class TwitterStreamer():
     """
     Class for streaming and processing live tweets.
@@ -93,12 +94,12 @@ class TweetAnalyzer():
     def clean_tweet(self, tweet):
         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
-#    def translate_tweet(self,tweet):
-#        language = TextBlob(self.clean_tweet(tweet))
-#        detected_language = language.detect_language()
-#        for language in self.clean_tweet(tweet):
-#            if language.detect_language != "en":
-#                return language.translate(from_lang=detected_language, to=u"en")
+    #    def translate_tweet(self,tweet):
+    #        language = TextBlob(self.clean_tweet(tweet))
+    #        detected_language = language.detect_language()
+    #        for language in self.clean_tweet(tweet):
+    #            if language.detect_language != "en":
+    #                return language.translate(from_lang=detected_language, to=u"en")
 
     def analyze_sentiment(self, tweet):
         analysis = TextBlob(self.clean_tweet(tweet))
@@ -108,15 +109,16 @@ class TweetAnalyzer():
     def tweets_to_data_frame(self, tweets):
         df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['tweets'])
 
-        df['id'] = np.array([tweet.id for tweet in tweets]) #Tweet Object
-        df['len'] = np.array([len(tweet.text) for tweet in tweets]) #Tweet Object
-        df['date'] = np.array([tweet.created_at for tweet in tweets]) #Tweet Object
-        df['user_id'] = np.array([tweet.user.id for tweet in tweets]) #User Object
-        df['user_screen_name'] = np.array([tweet.user.screen_name for tweet in tweets]) #User Object
-        df['follower_count'] = np.array([tweet.user.followers_count for tweet in tweets]) #User Object
-        df['location'] = np.array([tweet.coordinates for tweet in tweets]) #Tweet Object
-       
-       return df
+        df['id'] = np.array([tweet.id for tweet in tweets])  # Tweet Object
+        df['len'] = np.array([len(tweet.text) for tweet in tweets])  # Tweet Object
+        df['date'] = np.array([tweet.created_at for tweet in tweets])  # Tweet Object
+        df['lang'] = np.array([tweet.lang for tweet in tweets])  # Tweet Object  ----> If translation is needed, we could use this instead of Vader/Blob to detect the language
+        df['user_id'] = np.array([tweet.user.id for tweet in tweets])  # User Object
+        df['user_screen_name'] = np.array([tweet.user.screen_name for tweet in tweets])  # User Object
+        df['follower_count'] = np.array([tweet.user.followers_count for tweet in tweets])  # User Object
+        df['location'] = np.array([tweet.user.location for tweet in tweets])  # User Object
+
+        return df
 
 
 if __name__ == '__main__':
@@ -125,17 +127,18 @@ if __name__ == '__main__':
 
     api = twitter_client.get_twitter_client_api()
     # Tweets filtered based on manual user input
-    tweets = api.search(q = hash_tag_list , count = num_terms)
+    tweets = api.search(q=hash_tag_list, count=num_terms)
     df = tweet_analyzer.tweets_to_data_frame(tweets)
-   
-   # Adds Sentiment Score to dataframe 
+
+    # Adds Sentiment Score to dataframe
     df['sentiment'] = np.array([tweet_analyzer.analyze_sentiment(tweet) for tweet in df['tweets']])
     # Additional dataframe which only displays Tweets of users with 10.000 or more followers
     df_follower = df.loc[df['follower_count'] > 10000]
-    
+
     # Prints all Tweets and Sentiment Score
     print(df.head(int(num_terms)))
     # Prints the average score of the loaded Tweets
-    print("Average Sentiment Score of ", hash_tag_list, ", including ", num_terms, "Tweets is: ", sum(df["sentiment"])/len(df["sentiment"]))
+    print("Average Sentiment Score of ", hash_tag_list, ", including ", num_terms, "Tweets is: ",
+          sum(df["sentiment"]) / len(df["sentiment"]))
     # Prints only Tweets with more then 10000 followers
     print(df_follower)
