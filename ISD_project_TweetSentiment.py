@@ -4,6 +4,9 @@ import tweepy
 import wordcloud
 import numpy as np
 import pandas as pd
+import time
+import csv
+import yweather
 
 consumer_key = "LEZ6shUvjCPx12e9DwMtPw1uR"      #keys Florin
 consumer_secret = "TAVTA300b55zdzHdf9qGSw8xEMqHHELZuTjVOdfQnCO6Kof6yH"
@@ -59,7 +62,7 @@ def clean_tweets(lst):
     lst = np.vectorize(remove_pattern)(lst, "https?://[A-Za-z0-9./]*")
     # remove special characters, numbers, punctuations (except for #)
     lst = np.core.defchararray.replace(lst, "[^a-zA-Z#]", " ")
-return lst
+    return lst
 
 
 def word_cloud(wd_list):
@@ -71,7 +74,9 @@ def word_cloud(wd_list):
     plt.imshow(wordcloud, interpolation="bilinear");
     
 #stream listener
-
+"""
+Give a file name (any name with .csv at the end and filter words in form of a list e.g. ["trump","wall"] and time limit in seconds to get a csv file --> Live stream
+"""
 def twitter_stream_listener(file_name,filter_track,follow=None,locations=None,languages=None,time_limit=20):
     class CustomStreamListener(tweepy.StreamListener):
         def __init__(self, time_limit):
@@ -92,7 +97,7 @@ def twitter_stream_listener(file_name,filter_track,follow=None,locations=None,la
             else:
                 print("\n\n[INFO] Closing file and ending streaming")
                 return False
-         def on_error(self, status_code):
+        def on_error(self, status_code):
             if status_code == 420:
                 print('Encountered error code 420. Disconnecting the stream')
                 # returning False in on_data disconnects the stream
@@ -113,3 +118,16 @@ def twitter_stream_listener(file_name,filter_track,follow=None,locations=None,la
         auth, CustomStreamListener(time_limit=time_limit))
     streamingAPI.filter(track=filter_track,follow=follow,locations=locations,languages=languages)
     f.close()
+
+def find_woeid(location): #woe-id = where on earth id --> Input bspw. "New York" 
+    wc = yweather.Client()
+    woeid = wc.fetch_woeid(location)
+    print(woeid)
+    
+def trend_search(woeid): #10 Trends based on woe-id z.B. 2459115 --> "New York"
+    try:
+        trends_results = api.trends_place(woeid)
+        for trend in trends_results[0]["trends"][:10]:
+            print(trend["name"])
+    except tweepy.error.TweepError:
+        print("There are no trending topics for your location.")    
