@@ -215,8 +215,14 @@ def trend_search(woeid): #10 Trends based on woe-id z.B. 2459115 --> "New York"
         print("There are no trending topics for your location.")    
 
 def hashtag_preprocess(hash_tag_list):
-    if str.contain("#"):
-        print(hash_tag_list)
-    else:
-        print("#"+hash_tag_list)
+	if hash_tag_list.count("#") == 0: #When no # --> Add #
+		print("#"+hash_tag_list)
+
+	elif hash_tag_list.count("#") == 1: #When there is exactly one # ---> Do nothing
+		new_hash_tag_list = hash_tag_list.strip("#")
+		print(hash_tag_list)
+
+	else:
+		new_hash_tag_list = hash_tag_list.strip("#") #When there is more than one # ---> Delete all # and add one in the end
+		print("#"+new_hash_tag_list)
         
