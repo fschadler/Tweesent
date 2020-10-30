@@ -2,14 +2,18 @@ from tweepy import API
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-
+import time
+import csv
+import yweather
+import pandas as pd
+import numpy as np
+import re
 from textblob import TextBlob, Word, WordList
+import wordcloud
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as sia
+from googletrans import Translator
 
 import twitter_credentials
-
-import numpy as np
-import pandas as pd
-import re
 
 # User Input: Defines the search term and amount of Tweets that shall be analyzed.
 
@@ -142,3 +146,70 @@ if __name__ == '__main__':
           sum(df["sentiment"]) / len(df["sentiment"]))
     # Prints only Tweets with more then 10000 followers
     print(df_follower)
+
+def word_cloud(wd_list):
+    stopwords = set(STOPWORDS)
+    all_words = ' '.join([text for text in wd_list])
+    wordcloud = WordCloud(background_color='white',stopwords=stopwords,width=1600,height=800,random_state=21,colormap='jet',max_words=50,max_font_size=200).generate(all_words)
+    plt.figure(figsize=(12, 10))
+    plt.axis('off')
+    plt.imshow(wordcloud, interpolation="bilinear");
+    
+#stream listener
+"""
+Give a file name (any name with .csv at the end and filter words in form of a list e.g. ["trump","wall"] and time limit in seconds to get a csv file --> Live stream
+"""
+def twitter_stream_listener(file_name,filter_track,follow=None,locations=None,languages=None,time_limit=20):
+    class CustomStreamListener(tweepy.StreamListener):
+        def __init__(self, time_limit):
+            self.start_time = time.time()
+            self.limit = time_limit
+            # self.saveFile = open('abcd.json', 'a')
+            super(CustomStreamListener, self).__init__()
+        def on_status(self, status):
+            if (time.time() - self.start_time) < self.limit:
+                print(".", end="")
+                # Writing status data
+                with open(file_name, 'a') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([
+                        status.author.screen_name, status.created_at,
+                        status.text
+                    ])
+            else:
+                print("\n\n[INFO] Closing file and ending streaming")
+                return False
+        def on_error(self, status_code):
+            if status_code == 420:
+                print('Encountered error code 420. Disconnecting the stream')
+                # returning False in on_data disconnects the stream
+                return False
+            else:
+                print('Encountered error with status code: {}'.format(
+                    status_code))
+                return True  # Don't kill the stream
+        def on_timeout(self):
+            print('Timeout...')
+            return True  # Don't kill the stream
+    # Writing csv titles
+    print('\n[INFO] Open file: [{}] and starting {} seconds of streaming for {}\n'.format(file_name, time_limit, filter_track))
+    with open(file_name, 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(['author', 'date', 'text'])
+    streamingAPI = tweepy.streaming.Stream(
+        auth, CustomStreamListener(time_limit=time_limit))
+    streamingAPI.filter(track=filter_track,follow=follow,locations=locations,languages=languages)
+    f.close()
+
+def find_woeid(location): #woe-id = where on earth id --> Input bspw. "New York" 
+    wc = yweather.Client()
+    woeid = wc.fetch_woeid(location)
+    print(woeid)
+    
+def trend_search(woeid): #10 Trends based on woe-id z.B. 2459115 --> "New York"
+    try:
+        trends_results = api.trends_place(woeid)
+        for trend in trends_results[0]["trends"][:10]:
+            print(trend["name"])
+    except tweepy.error.TweepError:
+        print("There are no trending topics for your location.")    
