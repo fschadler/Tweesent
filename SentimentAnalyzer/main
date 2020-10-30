@@ -213,3 +213,10 @@ def trend_search(woeid): #10 Trends based on woe-id z.B. 2459115 --> "New York"
             print(trend["name"])
     except tweepy.error.TweepError:
         print("There are no trending topics for your location.")    
+
+def hashtag_preprocess(hash_tag_list):
+    if str.contain("#"):
+        print(hash_tag_list)
+    else:
+        print("#"+hash_tag_list)
+        
