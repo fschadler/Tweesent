@@ -1,17 +1,17 @@
-from tweepy import API
-from tweepy.streaming import StreamListener
-from tweepy import OAuthHandler
-from tweepy import Stream
+import tweepy
 import time
 import csv
 import yweather
-import pandas as pd
-import numpy as np
-import re
 from textblob import TextBlob, Word, WordList
+import numpy as np
+import pandas as pd
+import re
 import wordcloud
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as sia
 from googletrans import Translator
+
+import twitter_credentials
+
 
 import twitter_credentials
 
@@ -19,16 +19,21 @@ import twitter_credentials
 
 ######  Add predefined # infront of user Input, but if User manually adds # remove it "If str contains # remove "#""
 hash_tag_list = input("Enter keyword/hashtag: ")
-num_terms = input("Enter how many Tweets should be included: ")
+num_terms = int(input("Enter how many Tweets should be included: "))
 
 
 class TwitterClient():
     def __init__(self):
         self.auth = TwitterAuthenticator().authenticate_twitter_app()
-        self.twitter_client = API(self.auth)
+        self.twitter_client = tweepy.API(self.auth)
 
     def get_twitter_client_api(self):
         return self.twitter_client
+
+
+    def get_tweets(self):
+        tweets = [status for status in tweepy.Cursor(api.search, q=hash_tag_list).items(num_terms)]
+        return tweets
 
 
 # TWITTER AUTHENTICATOR
@@ -40,7 +45,7 @@ Uses twitter_credentials.py to get access to API
 class TwitterAuthenticator():
 
     def authenticate_twitter_app(self):
-        auth = OAuthHandler(twitter_credentials.CONSUMER_KEY, twitter_credentials.CONSUMER_SECRET)
+        auth = tweepy.OAuthHandler(twitter_credentials.CONSUMER_KEY, twitter_credentials.CONSUMER_SECRET)
         auth.set_access_token(twitter_credentials.ACCESS_TOKEN, twitter_credentials.ACCESS_TOKEN_SECRET)
         return auth
 
@@ -58,14 +63,14 @@ class TwitterStreamer():
         # This handles Twitter authentification and the connection to Twitter Streaming API
         listener = TwitterListener(fetched_tweets_filename)
         auth = self.twitter_authenticator.authenticate_twitter_app()
-        stream = Stream(auth, listener)
+        stream = tweepy.Stream(auth, listener)
 
         # Filter based on User Input
         stream.filter(track=hash_tag_list)
 
-"""
+
 # TWITTER STREAM LISTENER
-class TwitterListener(StreamListener):
+class TwitterListener(tweepy.StreamListener):
     """
     This is a basic listener that just prints received tweets to stdout.
     """
@@ -89,7 +94,7 @@ class TwitterListener(StreamListener):
             return False
         print(status)
 
-"""
+
 class TweetAnalyzer():
     """
     Functionality for analyzing and categorizing content from tweets.
@@ -98,12 +103,6 @@ class TweetAnalyzer():
     def clean_tweet(self, tweet):
         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
-    #    def translate_tweet(self,tweet):
-    #        language = TextBlob(self.clean_tweet(tweet))
-    #        detected_language = language.detect_language()
-    #        for language in self.clean_tweet(tweet):
-    #            if language.detect_language != "en":
-    #                return language.translate(from_lang=detected_language, to=u"en")
 
     def analyze_sentiment(self, tweet):
         analysis = TextBlob(self.clean_tweet(tweet))
@@ -124,14 +123,54 @@ class TweetAnalyzer():
 
         return df
 
+#    def word_cloud(self, wd_list):
+#        stopwords = set(STOPWORDS)
+#        all_words = ' '.join([text for text in wd_list])
+#        wordcloud = WordCloud(background_color='white', stopwords=stopwords, width=1600, height=800, random_state=21,
+#                              colormap='jet', max_words=50, max_font_size=200).generate(all_words)
+#        pd.plt.figure(figsize=(12, 10))
+#        pd.plt.axis('off')
+#        pd.plt.imshow(wordcloud, interpolation="bilinear");
+
+#    def find_woeid(location):  # woe-id = where on earth id --> Input bspw. "New York"
+#        wc = yweather.Client()
+#        woeid = wc.fetch_woeid(location)
+#        print(woeid)
+
+
+#    def trend_search(woeid):  # 10 Trends based on woe-id z.B. 2459115 --> "New York"
+#        try:
+#            trends_results = api.trends_place(woeid)
+#            for trend in trends_results[0]["trends"][:10]:
+#                print(trend["name"])
+#        except tweepy.error.TweepError:
+#            print("There are no trending topics for your location.")
+
+
+#    def hashtag_preprocess(hash_tag_list):
+#        if hash_tag_list.count("#") == 0:  # When no # --> Add #
+#            print("#" + hash_tag_list)
+#
+#        elif hash_tag_list.count("#") == 1:  # When there is exactly one # ---> Do nothing
+#            new_hash_tag_list = hash_tag_list.strip("#")
+#            print(new_hash_tag_list)
+#
+#        else:
+#            new_hash_tag_list = hash_tag_list.strip(
+#                "#")  # When there is more than one # ---> Delete all # and add one in the end
+#            print("#" + new_hash_tag_list)
+
+
 
 if __name__ == '__main__':
+
+
     twitter_client = TwitterClient()
     tweet_analyzer = TweetAnalyzer()
 
     api = twitter_client.get_twitter_client_api()
     # Tweets filtered based on manual user input
-    tweets = api.search(q=hash_tag_list, count=num_terms)
+    tweets = twitter_client.get_tweets()
     df = tweet_analyzer.tweets_to_data_frame(tweets)
 
     # Adds Sentiment Score to dataframe
@@ -142,87 +181,6 @@ if __name__ == '__main__':
     # Prints all Tweets and Sentiment Score
     print(df.head(int(num_terms)))
     # Prints the average score of the loaded Tweets
-    print("Average Sentiment Score of ", hash_tag_list, ", including ", num_terms, "Tweets is: ",
-          sum(df["sentiment"]) / len(df["sentiment"]))
+    print("Average Sentiment Score of ", hash_tag_list, ", including ", num_terms, "Tweets is: ", sum(df["sentiment"]) / len(df["sentiment"]))
     # Prints only Tweets with more then 10000 followers
     print(df_follower)
-
-def word_cloud(wd_list):
-    stopwords = set(STOPWORDS)
-    all_words = ' '.join([text for text in wd_list])
-    wordcloud = WordCloud(background_color='white',stopwords=stopwords,width=1600,height=800,random_state=21,colormap='jet',max_words=50,max_font_size=200).generate(all_words)
-    plt.figure(figsize=(12, 10))
-    plt.axis('off')
-    plt.imshow(wordcloud, interpolation="bilinear");
-    
-#stream listener
-"""
-Give a file name (any name with .csv at the end and filter words in form of a list e.g. ["trump","wall"] and time limit in seconds to get a csv file --> Live stream
-"""
-def twitter_stream_listener(file_name,filter_track,follow=None,locations=None,languages=None,time_limit=20):
-    class CustomStreamListener(tweepy.StreamListener):
-        def __init__(self, time_limit):
-            self.start_time = time.time()
-            self.limit = time_limit
-            # self.saveFile = open('abcd.json', 'a')
-            super(CustomStreamListener, self).__init__()
-        def on_status(self, status):
-            if (time.time() - self.start_time) < self.limit:
-                print(".", end="")
-                # Writing status data
-                with open(file_name, 'a') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([
-                        status.author.screen_name, status.created_at,
-                        status.text
-                    ])
-            else:
-                print("\n\n[INFO] Closing file and ending streaming")
-                return False
-        def on_error(self, status_code):
-            if status_code == 420:
-                print('Encountered error code 420. Disconnecting the stream')
-                # returning False in on_data disconnects the stream
-                return False
-            else:
-                print('Encountered error with status code: {}'.format(
-                    status_code))
-                return True  # Don't kill the stream
-        def on_timeout(self):
-            print('Timeout...')
-            return True  # Don't kill the stream
-    # Writing csv titles
-    print('\n[INFO] Open file: [{}] and starting {} seconds of streaming for {}\n'.format(file_name, time_limit, filter_track))
-    with open(file_name, 'w') as f:
-        writer = csv.writer(f)
-        writer.writerow(['author', 'date', 'text'])
-    streamingAPI = tweepy.streaming.Stream(
-        auth, CustomStreamListener(time_limit=time_limit))
-    streamingAPI.filter(track=filter_track,follow=follow,locations=locations,languages=languages)
-    f.close()
-
-def find_woeid(location): #woe-id = where on earth id --> Input bspw. "New York" 
-    wc = yweather.Client()
-    woeid = wc.fetch_woeid(location)
-    print(woeid)
-    
-def trend_search(woeid): #10 Trends based on woe-id z.B. 2459115 --> "New York"
-    try:
-        trends_results = api.trends_place(woeid)
-        for trend in trends_results[0]["trends"][:10]:
-            print(trend["name"])
-    except tweepy.error.TweepError:
-        print("There are no trending topics for your location.")    
-
-def hashtag_preprocess(hash_tag_list):
-	if hash_tag_list.count("#") == 0: #When no # --> Add #
-		print("#"+hash_tag_list)
-
-	elif hash_tag_list.count("#") == 1: #When there is exactly one # ---> Do nothing
-		new_hash_tag_list = hash_tag_list.strip("#")
-		print(hash_tag_list)
-
-	else:
-		new_hash_tag_list = hash_tag_list.strip("#") #When there is more than one # ---> Delete all # and add one in the end
-		print("#"+new_hash_tag_list)
-        
