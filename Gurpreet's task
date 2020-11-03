@@ -1,0 +1,13 @@
+#create function that adds# and check if user already added a# to key word then remove it.
+
+def my_function(hashtag):
+
+    if str.contains("#"):
+   # newstr = hashtag.replace("#", "")
+      print(hashtag)
+
+    else :
+      print("#" + hashtag)
+
+x = my_function()
+print (x)
