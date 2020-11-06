@@ -10,6 +10,7 @@ from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as sia
 from googletrans import Translator
 from geopy.geocoders import Nominatim
+
 geolocator = Nominatim(user_agent="TweetAnalyzer")
 
 import twitter_credentials
@@ -19,6 +20,18 @@ import twitter_credentials
 ######  Add predefined # infront of user Input, but if User manually adds # remove it "If str contains # remove "#""
 hash_tag_list = input("Enter keyword/hashtag: ")
 num_terms = int(input("Enter how many Tweets should be included: "))
+
+if hash_tag_list.count("#") == 0:  # When no # --> Add #
+    hash_tag_list = ("#" + hash_tag_list)
+
+elif hash_tag_list.count("#") == 1:  # When there is exactly one # ---> Do nothing
+    hash_tag_list = hash_tag_list
+
+else:
+    new_hash_tag_list = hash_tag_list.strip("#")  # When there is more than one # ---> Delete all # and add one in the end
+    hash_tag_list = ("#" + new_hash_tag_list)
+
+
 
 
 class TwitterClient():
@@ -132,18 +145,6 @@ def word_cloud(list_of_tweets):
     plt.imshow(wordcloud, interpolation="bilinear");
 #plt.show()
 
-#    def hashtag_preprocess(hash_tag_list):
-#        if hash_tag_list.count("#") == 0:  # When no # --> Add #
-#            print("#" + hash_tag_list)
-#
-#        elif hash_tag_list.count("#") == 1:  # When there is exactly one # ---> Do nothing
-#            new_hash_tag_list = hash_tag_list.strip("#")
-#            print(new_hash_tag_list)
-#
-#        else:
-#            new_hash_tag_list = hash_tag_list.strip(
-#                "#")  # When there is more than one # ---> Delete all # and add one in the end
-#            print("#" + new_hash_tag_list)
 
 def get_location_and_trends(your_location): #input needs to be string
     geolocator = Nominatim(user_agent="TweetAnalyzer")
@@ -179,4 +180,3 @@ if __name__ == '__main__':
     print("Average Sentiment Score of ", hash_tag_list, ", including ", num_terms, "Tweets is: ", sum(df["sentiment"]) / len(df["sentiment"]))
     # Prints only Tweets with more then 10000 followers
     print(df_follower)
-    
