@@ -121,7 +121,7 @@ class TweetAnalyzer():
         df['location'] = np.array([tweet.user.location for tweet in tweets])  # User Object
 
         return df
-list_of_tweets= list(df["tweets"])
+#list_of_tweets= list(df["tweets"])
 def word_cloud(list_of_tweets):
     stopwords = set(STOPWORDS)
     all_words = ' '.join([text for text in wd_list])
