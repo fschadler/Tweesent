@@ -1,17 +1,16 @@
 import tweepy
 import time
 import csv
-import yweather
+import matplotlib.pyplot as plt
 from textblob import TextBlob, Word, WordList
 import numpy as np
 import pandas as pd
 import re
-import wordcloud
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as sia
 from googletrans import Translator
-
-import twitter_credentials
-
+from geopy.geocoders import Nominatim
+geolocator = Nominatim(user_agent="TweetAnalyzer")
 
 import twitter_credentials
 
@@ -122,30 +121,16 @@ class TweetAnalyzer():
         df['location'] = np.array([tweet.user.location for tweet in tweets])  # User Object
 
         return df
-
-#    def word_cloud(self, wd_list):
-#        stopwords = set(STOPWORDS)
-#        all_words = ' '.join([text for text in wd_list])
-#        wordcloud = WordCloud(background_color='white', stopwords=stopwords, width=1600, height=800, random_state=21,
-#                              colormap='jet', max_words=50, max_font_size=200).generate(all_words)
-#        pd.plt.figure(figsize=(12, 10))
-#        pd.plt.axis('off')
-#        pd.plt.imshow(wordcloud, interpolation="bilinear");
-
-#    def find_woeid(location):  # woe-id = where on earth id --> Input bspw. "New York"
-#        wc = yweather.Client()
-#        woeid = wc.fetch_woeid(location)
-#        print(woeid)
-
-
-#    def trend_search(woeid):  # 10 Trends based on woe-id z.B. 2459115 --> "New York"
-#        try:
-#            trends_results = api.trends_place(woeid)
-#            for trend in trends_results[0]["trends"][:10]:
-#                print(trend["name"])
-#        except tweepy.error.TweepError:
-#            print("There are no trending topics for your location.")
-
+list_of_tweets= list(df["tweets"])
+def word_cloud(list_of_tweets):
+    stopwords = set(STOPWORDS)
+    all_words = ' '.join([text for text in wd_list])
+    wordcloud = WordCloud(background_color='white', stopwords=stopwords, width=1600, height=800, random_state=21,
+                              colormap='jet', max_words=50, max_font_size=200).generate(all_words)
+    plt.figure(figsize=(12, 10))
+    plt.axis('off')
+    plt.imshow(wordcloud, interpolation="bilinear");
+#plt.show()
 
 #    def hashtag_preprocess(hash_tag_list):
 #        if hash_tag_list.count("#") == 0:  # When no # --> Add #
@@ -160,7 +145,17 @@ class TweetAnalyzer():
 #                "#")  # When there is more than one # ---> Delete all # and add one in the end
 #            print("#" + new_hash_tag_list)
 
-
+def get_location_and_trends(your_location): #input needs to be string
+    geolocator = Nominatim(user_agent="TweetAnalyzer")
+    location = geolocator.geocode(your_location)
+    location_data = api.trends_closest(location.latitude, location.longitude)
+    woeid = location_data[0]["woeid"]
+    try:
+            trends_results = api.trends_place(woeid)
+            for trend in trends_results[0]["trends"][:10]:
+                print(trend["name"])
+    except tweepy.error.TweepError:
+	    print("There are no trending topics in your location.")
 
 if __name__ == '__main__':
 
@@ -184,3 +179,4 @@ if __name__ == '__main__':
     print("Average Sentiment Score of ", hash_tag_list, ", including ", num_terms, "Tweets is: ", sum(df["sentiment"]) / len(df["sentiment"]))
     # Prints only Tweets with more then 10000 followers
     print(df_follower)
+    
