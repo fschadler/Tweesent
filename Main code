@@ -1,0 +1,206 @@
+import tweepy
+import time
+import csv
+import matplotlib.pyplot as plt
+from textblob import TextBlob, Word, WordList
+import numpy as np
+import pandas as pd
+import re
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer as sia
+from googletrans import Translator
+from geopy.geocoders import Nominatim
+geolocator = Nominatim(user_agent="TweetAnalyzer")
+
+import twitter_credentials
+
+# User Input: Defines the search term and amount of Tweets that shall be analyzed.
+
+######  Add predefined # infront of user Input, but if User manually adds # remove it "If str contains # remove "#""
+hash_tag_list = input("Enter keyword/hashtag: ")
+num_terms = int(input("Enter how many Tweets should be included: "))
+
+if hash_tag_list.count("#") == 0:  #when no # --> Add #
+    hash_tag_list = ("#" + hash_tag_list)
+
+elif hash_tag_list.count("#") == 1:  # when there is exactly one # ---> do nothing
+    hash_tag_list = hash_tag_list
+
+else:
+    new_hash_tag_list = hash_tag_list.strip("#")  # when there is more than one # ---> delete all # and add one in the end
+    hash_tag_list = ("#" + new_hash_tag_list)
+
+
+class TwitterClient():
+    def __init__(self):
+        self.auth = TwitterAuthenticator().authenticate_twitter_app()
+        self.twitter_client = tweepy.API(self.auth)
+
+    def get_twitter_client_api(self):
+        return self.twitter_client
+
+
+    def get_tweets(self):
+        tweets = [status for status in tweepy.Cursor(api.search, q=hash_tag_list).items(num_terms)]
+        return tweets
+
+
+# TWITTER AUTHENTICATOR
+"""
+Uses twitter_credentials.py to get access to API
+"""
+
+
+class TwitterAuthenticator():
+
+    def authenticate_twitter_app(self):
+        auth = tweepy.OAuthHandler(twitter_credentials.CONSUMER_KEY, twitter_credentials.CONSUMER_SECRET)
+        auth.set_access_token(twitter_credentials.ACCESS_TOKEN, twitter_credentials.ACCESS_TOKEN_SECRET)
+        return auth
+
+
+# TWITTER STREAMER
+class TwitterStreamer():
+    """
+    Class for streaming and processing live tweets.
+    """
+
+    def __init__(self):
+        self.twitter_autenthicator = TwitterAuthenticator()
+
+    def stream_tweets(self, fetched_tweets_filename, hash_tag_list):
+        # This handles Twitter authentification and the connection to Twitter Streaming API
+        listener = TwitterListener(fetched_tweets_filename)
+        auth = self.twitter_authenticator.authenticate_twitter_app()
+        stream = tweepy.Stream(auth, listener)
+
+        # Filter based on User Input
+        stream.filter(track=hash_tag_list)
+
+
+# TWITTER STREAM LISTENER
+class TwitterListener(tweepy.StreamListener):
+    """
+    This is a basic listener that just prints received tweets to stdout.
+    """
+
+    def __init__(self, fetched_tweets_filename):
+        self.fetched_tweets_filename = fetched_tweets_filename
+
+    def on_data(self, data):
+        try:
+            print(data)
+            with open(self.fetched_tweets_filename, 'a') as tf:
+                tf.write(data)
+            return True
+        except BaseException as e:
+            print("Error on_data %s" % str(e))
+        return True
+
+    def on_error(self, status):
+        if status == 420:
+            # Returning False on_data method in case rate limit occurs.
+            return False
+        print(status)
+
+
+class TweetAnalyzer():
+    """
+    Functionality for analyzing and categorizing content from tweets.
+    """
+
+    def clean_tweet(self, tweet):
+        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+
+
+    def analyze_sentiment(self, tweet):
+        analysis = TextBlob(self.clean_tweet(tweet))
+
+        return analysis.sentiment.polarity
+
+    def tweets_to_data_frame(self, tweets):
+        df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['tweets'])
+
+        df['id'] = np.array([tweet.id for tweet in tweets])  # Tweet Object
+        df['len'] = np.array([len(tweet.text) for tweet in tweets])  # Tweet Object
+        df['date'] = np.array([tweet.created_at for tweet in tweets])  # Tweet Object
+        df['lang'] = np.array([tweet.lang for tweet in tweets])  # Tweet Object  ----> If translation is needed, we could use this instead of Vader/Blob to detect the language
+        df['user_id'] = np.array([tweet.user.id for tweet in tweets])  # User Object
+        df['user_screen_name'] = np.array([tweet.user.screen_name for tweet in tweets])  # User Object
+        df['follower_count'] = np.array([tweet.user.followers_count for tweet in tweets])  # User Object
+        df['location'] = np.array([tweet.user.location for tweet in tweets])  # User Object
+
+        return df
+
+#list_of_tweets= list(df["tweets"])
+def word_cloud(list_of_tweets):
+    stopwords = set(STOPWORDS)
+    all_words = ' '.join([text for text in list_of_tweets])
+    wordcloud = WordCloud(background_color='white', stopwords=stopwords, width=1600, height=800, random_state=21,
+                              colormap='jet', max_words=50, max_font_size=200).generate(all_words)
+    plt.figure(figsize=(12, 10))
+    plt.axis('off')
+    plt.imshow(wordcloud, interpolation="bilinear");
+#plt.show()
+
+
+def get_location_and_trends(your_location): #input needs to be string
+    geolocator = Nominatim(user_agent="TweetAnalyzer")
+    location = geolocator.geocode(your_location)
+    location_data = api.trends_closest(location.latitude, location.longitude)
+    woeid = location_data[0]["woeid"]
+    try:
+            trends_results = api.trends_place(woeid)
+            for trend in trends_results[0]["trends"][:10]:
+                print(trend["name"])
+    except tweepy.error.TweepError:
+	    print("There are no trending topics in your location.")
+
+
+if __name__ == '__main__':
+
+
+    twitter_client = TwitterClient()
+    tweet_analyzer = TweetAnalyzer()
+
+    api = twitter_client.get_twitter_client_api()
+    # Tweets filtered based on manual user input
+    tweets = twitter_client.get_tweets()
+    df = tweet_analyzer.tweets_to_data_frame(tweets)
+
+    # Adds Sentiment Score to dataframe
+    df['sentiment'] = np.array([tweet_analyzer.analyze_sentiment(tweet) for tweet in df['tweets']])
+    # Additional dataframe which only displays Tweets of users with 10.000 or more followers
+    df_follower = df.loc[df['follower_count'] > 10000]
+
+    # Prints all Tweets and Sentiment Score
+    print(df.head(int(num_terms)))
+    # Prints the average score of the loaded Tweets
+    print("Average Sentiment Score of ", hash_tag_list, ", including ", num_terms, "Tweets is: ", sum(df["sentiment"]) / len(df["sentiment"]))
+    # Prints only Tweets with more then 10000 followers
+    print(df_follower)
+
+
+
+if __name__ == '__main__':
+
+
+    twitter_client = TwitterClient()
+    tweet_analyzer = TweetAnalyzer()
+
+    api = twitter_client.get_twitter_client_api()
+    # Tweets filtered based on manual user input
+    tweets = twitter_client.get_tweets()
+    df = tweet_analyzer.tweets_to_data_frame(tweets)
+
+    # Adds Sentiment Score to dataframe
+    df['sentiment'] = np.array([tweet_analyzer.analyze_sentiment(tweet) for tweet in df['tweets']])
+    # Additional dataframe which only displays Tweets of users with 10.000 or more followers
+    df_follower = df.loc[df['follower_count'] > 10000]
+
+    # Prints all Tweets and Sentiment Score
+    print(df.head(int(num_terms)))
+    # Prints the average score of the loaded Tweets
+    print("Average Sentiment Score of ", hash_tag_list, ", including ", num_terms, "Tweets is: ", sum(df["sentiment"]) / len(df["sentiment"]))
+    # Prints only Tweets with more then 10000 followers
+    print(df_follower)
