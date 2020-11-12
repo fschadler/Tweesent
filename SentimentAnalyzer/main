@@ -106,7 +106,22 @@ class TwitterListener(tweepy.StreamListener):
             # Returning False on_data method in case rate limit occurs.
             return False
         print(status)
-
+def remove_pattern(input_txt, pattern):
+    r = re.findall(pattern, input_txt)
+    for i in r:
+        input_txt = re.sub(i, "", input_txt)
+    return input_txt
+        
+def clean_tweets(lst):
+    # remove twitter Return handles (RT @xxx:)
+    lst = np.vectorize(remove_pattern)(lst, "RT @[\w]*:")
+    # remove twitter handles (@xxx)
+    lst = np.vectorize(remove_pattern)(lst, "@[\w]*")
+    # remove URL links (httpxxx)
+    lst = np.vectorize(remove_pattern)(lst, "https?://[A-Za-z0-9./]*")
+    # remove special characters, numbers, punctuations (except for #)
+    lst = np.core.defchararray.replace(lst, "[^a-zA-Z#]", " ")
+    return lst
 
 class TweetAnalyzer():
     """
@@ -133,10 +148,13 @@ class TweetAnalyzer():
         df['user_id'] = np.array([tweet.user.id for tweet in tweets])  # User Object
         df['user_screen_name'] = np.array([tweet.user.screen_name for tweet in tweets])  # User Object
         df['follower_count'] = np.array([tweet.user.followers_count for tweet in tweets])  # User Object
-        df["english"] = df["tweets"].apply(translator.translate, src="auto", dest='en').apply(getattr, args=('text',))
-
+	df["english_tweets"] = df["tweets"].apply(lambda x: translator.translate(x, dest="en").text)
+        df["english_tweets"] = df["english_tweets"].astype("str")
+        df["cleaned_tweets"] = df["tweets"].map(lambda x: clean_tweets(x))
+        df["cleaned_english_tweets"] = df["english_tweets"].map(lambda x: clean_tweets(x))
         return df
-#list_of_tweets= list(df["tweets"])
+	
+
 def word_cloud(list_of_tweets):
     stopwords = set(STOPWORDS)
     all_words = ' '.join([text for text in list_of_tweets])
@@ -183,3 +201,9 @@ if __name__ == '__main__':
     print("Average Sentiment Score of ", hash_tag_list, ", including ", num_terms, "Tweets is: ", sum(df["sentiment"]) / len(df["sentiment"]))
     # Prints only Tweets with more then 10000 followers
     print(df_follower)
+
+#Tweet lists for quick word_cloud analyzing
+list_of_tweets= list(df["tweets"])
+list_of_cleaned_tweets= list(df["cleaned_tweets"])
+list_of_english_tweets= list(df["english_tweets"])
+list_of_cleaned_english_tweets= list(df["cleaned_english_tweets"])
