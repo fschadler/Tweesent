@@ -1,12 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
 <html>
-	<h1>Twitter Sentiment Analysis</h1>
-		<div>
-			<h2>Average Sentiment Score of pulled Tweets:</h2>
-			<p>Sentiment Score: {{ sentiment_average }}</p>
-		<h2>Tweet Table</h2>
-		</div>
-			<div>
- 			{{ html_table | safe }}
-			</div>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
 
+<div class="container">
+  <h1>Sentiment Analyser</h1>
+  <h2>Total Sentiment Score: <var>{{sentiment_average}}</var></h2>
+  <p>The sentiment score can be between -1 and 1.</p>
+
+  <h2>Loaded Tweets</h2>
+  <p>Use the button below to display all used Tweets with their sentiment score.</p>
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#showcase">Expand / Collapse</button>
+  <div id="showcase" class="collapse">
+    {{ html_table | safe }}
+  </div>
+</div>
+
+</body>
 </html>
+{% endblock %}
+

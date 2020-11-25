@@ -4,7 +4,7 @@ import re
 import numpy as np
 import pandas as pd
 from textblob import TextBlob
-from googletrans import Translator
+from google_trans_new import google_translator as Translator
 
 
 
@@ -53,7 +53,8 @@ class TweetAnalyser:
         df['user_id'] = np.array([tweet.user.id for tweet in tweets])
         df['user_screen_name'] = np.array([tweet.user.screen_name for tweet in tweets])
         df['follower_count'] = np.array([tweet.user.followers_count for tweet in tweets])
-        df["english_tweets"] = df["tweets"].apply(lambda x: translator.translate(x, dest="en").text)
+        df['location'] = np.array([tweet.user.location for tweet in tweets])
+        df["english_tweets"] = df["tweets"].apply(lambda x: translator.translate(x, lang_tgt="en"))
         df["english_tweets"] = df["english_tweets"].astype("str")
         df["cleaned_tweets"] = df["tweets"].map(lambda x: clean_tweets(x))
         df["cleaned_english_tweets"] = df["english_tweets"].map(lambda x: clean_tweets(x))
@@ -77,7 +78,8 @@ def prediction(request):
     list_of_cleaned_tweets = list(df["cleaned_tweets"])
     list_of_english_tweets = list(df["english_tweets"])
     list_of_cleaned_english_tweets = list(df["cleaned_english_tweets"])
-    df_html = df.to_html
+    test = df[["tweets", "sentiment"]]
+    df_html = test.to_html
     sentiment_average = {}
     sentiment_average = sum(df["sentiment"]) / len(df["sentiment"])
     if request.method == 'POST':
