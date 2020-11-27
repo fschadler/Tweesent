@@ -1,0 +1,118 @@
+<!D0CTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+    <title>Navbar with logo</title>
+
+    <style>
+    body{
+        margin:0;
+        padding:0;
+        background:white;
+        }
+     nav{
+        width:100%;
+        background:black;
+        overflow:auto;
+        }
+     ul{
+        padding:0;
+        margin:0 0 0 150px;
+        list-style:none
+        }
+     li{
+        float:right;
+        }
+     .logo img{
+        position:absolute;
+        margin-top:5px;
+        margin-left:20px;
+        }
+     nav a{
+        width:100px;
+        display:block;
+        padding:20px 15px;
+        text-decoration:none;
+        font-family:Arial;
+        color:#039be5;
+        text-align:center;
+        }
+     nav a:hover {
+        background:purple;
+        transition:0.5s;
+        text-transform:uppercase;
+        }
+    </style>
+</head>
+<body>
+<div class ="logo"><a href ="#"><img src = "{%static 'twitterlogo.png' %}" width = "120px"></a>
+</div>
+
+
+<nav>
+    <ul>
+        <li><a href ="#"> Home</a></li>li>
+        <li><a href ="#"> FAQ</a></li>li>
+        <li><a href ="#"> Contact</a></li>li>
+    </ul>
+</nav>
+</body>
+</html>
+
+
+<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+   {% block title %}
+   {% endblock title %}
+
+   <nav class="navbar navbar-expand-lg navbar-light bg-info">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+          </div>
+      </nav>
+
+  </head>
+  <body>
+
+    {% block content %}
+    {% endblock content%}
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  </body>
+</html>
+
+<!___*** Footer Area ***___!>
+<style >
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+
+    </style>
+
+<main>
+</main>
+
+<footer class="page-footer teal lighten-2" style="!important;padding-top: 0">
+    <div class="footer-copyright">
+            <div class="container">
+            © 2020 Created by Students of University of Liechtenstein
+            <a  href="#!">More Links</a>
+            </div>
+          </div>
+        </footer>
+</body>
+</html>
