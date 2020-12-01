@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 #Selfmade Apps
     "App_TwitterDataAnalyser",
     "App_TwitterDataCollector",
+    "App_TwitterDataframe",
 ]
 
 MIDDLEWARE = [
