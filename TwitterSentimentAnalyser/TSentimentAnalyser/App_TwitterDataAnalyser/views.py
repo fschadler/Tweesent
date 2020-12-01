@@ -72,6 +72,10 @@ def prediction(request):
                                                    "tweet_duration": tweet_duration, "df_top_html": df_top_html,
                                                    "clean_tweet": clean_tweet})
 
+def contact(request):
+    return render(request, 'contact.html', {})
 
+def home(request):
+    return render(request, 'home', {})
 
 
