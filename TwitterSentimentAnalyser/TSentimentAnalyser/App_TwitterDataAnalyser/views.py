@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from TwitterSentimentAnalyser.TSentimentAnalyser.App_TwitterDataCollector.views import TwitterClient
+from ISD.TwitterSentimentAnalyser.TSentimentAnalyser.App_TwitterDataCollector.views import TwitterClient
 import re
 import numpy as np
 import pandas as pd
@@ -80,10 +80,17 @@ def prediction(request):
     list_of_cleaned_english_tweets = list(df["cleaned_english_tweets"])
     test = df[["tweets", "sentiment"]]
     df_html = test.to_html
-    sentiment_average = {}
-    sentiment_average = sum(df["sentiment"]) / len(df["sentiment"])
+    sentiment_average = round(sum(df["sentiment"]) / len(df["sentiment"]), 2)
+    input_num_terms = (request.POST['num_terms'])
+    input_hashtag = request.POST['hashtag']
+    tweet_duration = max(df["date"]) - min(df["date"])
+    df_top = df[["user_screen_name", "follower_count"]].nlargest(5, "follower_count")
+    df_top_html = df_top.to_html(index = False, header = False)
     if request.method == 'POST':
-        return render(request, 'prediction.html', {'html_table': df_html, "sentiment_average": sentiment_average})
+        return render(request, 'prediction.html', {'html_table': df_html, "sentiment_average": sentiment_average,
+                                                   "input_num_terms": input_num_terms, "input_hashtag": input_hashtag,
+                                                   "tweet_duration": tweet_duration, "df_top_html": df_top_html})
+
 
 
 

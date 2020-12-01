@@ -11,15 +11,24 @@
 
 <div class="container">
   <h1>Sentiment Analyser</h1>
-  <h2>Total Sentiment Score: <var>{{sentiment_average}}</var></h2>
-  <p>The sentiment score can be between -1 and 1.</p>
+  <h4>Lets have a look at your results:</h4>
+  <h5>You pulled <var>{{input_num_terms}}</var> Tweets for the search-term <b><var>{{input_hashtag}}</var></b>.</h5>
+  <h6>Your pulled Tweets consist of a time-length of <var>{{tweet_duration}}.</var></h6>
+  <h5>Total Sentiment Score: <var>{{sentiment_average}}</var></h5>
 
-  <h2>Loaded Tweets</h2>
+  <h6>The total sentiment score can be between -1 and 1.</h6>
+  <h6>The higher the score the more positive words have been used for your specified hashtag.</h6>
+
+  <h4>Who Tweets about <b><var>{{input_hashtag}}</var></b>?</h4>
+  <h6>Here is a list with the most known people that currently tweeted about this topic:</h6>
+  {{ df_top_html | safe }}
+  <h4>Loaded Tweets</h4>
   <p>Use the button below to display all used Tweets with their sentiment score.</p>
   <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#showcase">Expand / Collapse</button>
   <div id="showcase" class="collapse">
     {{ html_table | safe }}
   </div>
+
 </div>
 
 </body>

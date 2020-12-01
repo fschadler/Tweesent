@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from TwitterSentimentAnalyser.TSentimentAnalyser.App_TwitterDataCollector.views import show
-from TwitterSentimentAnalyser.TSentimentAnalyser.App_TwitterDataAnalyser.views import prediction
+from ISD.TwitterSentimentAnalyser.TSentimentAnalyser.App_TwitterDataCollector.views import show
+from ISD.TwitterSentimentAnalyser.TSentimentAnalyser.App_TwitterDataAnalyser.views import prediction
 
 urlpatterns = [
     path('admin/', admin.site.urls),
