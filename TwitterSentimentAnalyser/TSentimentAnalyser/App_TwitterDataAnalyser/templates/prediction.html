@@ -14,11 +14,13 @@
   <h4>Lets have a look at your results:</h4>
   <h5>You pulled <var>{{input_num_terms}}</var> Tweets for the search-term <b><var>{{input_hashtag}}</var></b>.</h5>
   <h6>Your pulled Tweets consist of a time-length of <var>{{tweet_duration}}.</var></h6>
-  <h5>Total Sentiment Score: <var>{{sentiment_average}}</var></h5>
+  <h4>Total Sentiment Score: <var>{{sentiment_average}}</var></h4>
 
   <h6>The total sentiment score can be between -1 and 1.</h6>
   <h6>The higher the score the more positive words have been used for your specified hashtag.</h6>
-
+  <h5>Positive Tweets: <var>{{count_positive}}</var></h5>
+  <h5>Neutral Tweets: <var>{{count_neutral}}</var></h5>
+  <h5>Negative Tweets: <var>{{count_negative}}</var></h5>
   <h4>Who Tweets about <b><var>{{input_hashtag}}</var></b>?</h4>
   <h6>Here is a list with the most known people that currently tweeted about this topic:</h6>
   {{ df_top_html | safe }}

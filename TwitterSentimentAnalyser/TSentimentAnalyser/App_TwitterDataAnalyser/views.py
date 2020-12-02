@@ -65,17 +65,24 @@ def prediction(request):
     input_hashtag = request.POST['hashtag']
     # Variable to display what time range the Tweets are based of.
     tweet_duration = max(df["date"]) - min(df["date"])
+    # Variables to display amount of positive / neutral / negative Tweets
+    count_positive = int(np.sum(df['sentiment'] > 0))
+    count_neutral = int(np.sum(df['sentiment'] == 0))
+    count_negative = int(np.sum(df['sentiment'] < 0))
+
 
     if request.method == 'POST':
         return render(request, 'prediction.html', {'df_short_html': df_short_html, "sentiment_average": sentiment_average,
                                                    "input_num_terms": input_num_terms, "input_hashtag": input_hashtag,
                                                    "tweet_duration": tweet_duration, "df_top_html": df_top_html,
+                                                   "clean_tweet": clean_tweet, "count_positive": count_positive,
+                                                   "count_neutral": count_neutral, "count_negative": count_negative,
                                                    "clean_tweet": clean_tweet})
+
 
 def contact(request):
     return render(request, 'contact.html', {})
 
+
 def home(request):
     return render(request, 'home', {})
-
-
