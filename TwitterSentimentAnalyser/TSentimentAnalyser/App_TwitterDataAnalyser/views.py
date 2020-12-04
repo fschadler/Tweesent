@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from ISD.TwitterSentimentAnalyser.TSentimentAnalyser.App_TwitterDataCollector.views import TwitterClient
-from ISD.TwitterSentimentAnalyser.TSentimentAnalyser.App_TwitterDataframe.views import TweetToDataframe
+from App_TwitterDataCollector.views import TwitterClient
+from App_TwitterDataframe.views import TweetToDataframe
 import numpy as np
 from textblob import TextBlob
 

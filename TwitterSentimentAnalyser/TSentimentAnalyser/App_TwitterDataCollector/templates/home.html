@@ -8,6 +8,30 @@
 			<button type="submit">Submit</button>
 		</form>
 	</body>
-</html>
+
 {% endblock %}
 
+{% block content2 %}
+	<body>
+		<form action="." method="post">
+            {% csrf_token %}
+			{{ location.as_p }}<br>
+            <button type="submit">Get Trends</button>
+        </form>
+	</body>
+{% endblock content2 %}
+
+{% block content3 %}
+<div class="container">
+
+  <h3>Your location-based Trends for: {{input_location}}</h3>
+
+  <p>Your Top 10 Trends are:</p>
+
+{% for trend in top10_trends %}
+    {{ trend }}<br>
+{% endfor %}
+</div>
+{% endblock content3 %}
+
+</html>
