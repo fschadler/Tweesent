@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', show),
     path('hit',prediction),
+    path('Contact', include('App_TwitterDataAnalyser.urls')),
     #path('Contact', Contact),
 ]
