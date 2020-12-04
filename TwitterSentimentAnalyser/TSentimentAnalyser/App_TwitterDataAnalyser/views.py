@@ -80,9 +80,5 @@ def prediction(request):
                                                    "clean_tweet": clean_tweet})
 
 
-def contact(request):
-    return render(request, 'contact.html', {})
-
-
-def home(request):
-    return render(request, 'home', {})
+def Contact(request):
+    return render(request, 'Contact.html', {})
