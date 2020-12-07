@@ -3,41 +3,25 @@ from App_TwitterDataCollector.views import TwitterClient
 from App_TwitterDataframe.views import TweetToDataframe
 import numpy as np
 from textblob import TextBlob
-
-
-"""
-This app is used to analyse the Dataframe from App_TwitterDataframe.
-"""
-
-
-class TweetSentiment:
-    """
-    Analyses the sentiment score of the cleaned tweets.
-    """
-    clean_tweet = TweetToDataframe.clean_tweet
-
-    def analyze_sentiment(self, tweet):
-        analysis = TextBlob(self.clean_tweet(tweet))
-
-        return analysis.sentiment.polarity
-
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 """
 Class to create variables and dataframes which are rendered on the output page. 
 """
-
+analyzer = SentimentIntensityAnalyzer()
 
 def prediction(request):
 
     twitter_client = TwitterClient()
     tweet_df = TweetToDataframe()
-    tweet_sentiment = TweetSentiment()
-    clean_tweet = TweetToDataframe.clean_tweet
     tweets = twitter_client.get_tweets(request)
     df = tweet_df.tweets_to_data_frame(tweets)
 
-    # Adds the sentiment Score to the Dataframe
-    df['sentiment'] = np.array([tweet_sentiment.analyze_sentiment(tweet) for tweet in df['tweets']])
+    # Adds the sentiment Score to the Dataframe based on cleaned and translated Tweets
+#    df['sentiment'] = df['cleaned_english_tweets'].apply(lambda tweet: TextBlob(tweet).sentiment.polarity)
+#    df['sentiment'] = np.round(df['sentiment'], decimals=2)
+    df['sentiment'] = [analyzer.polarity_scores(x)['compound'] for x in df['cleaned_english_tweets']]
+    df['sentiment'] = np.round(df['sentiment'], decimals=2)
 
     # Do we still need those lists? @Florin
     list_of_tweets = list(df["tweets"])
@@ -49,7 +33,7 @@ def prediction(request):
     Dataframes for HTML: 
     """
     # Creates a slimmer Dataframe Table for the Output Page
-    df_short = df[["tweets","sentiment"]]
+    df_short = df[["tweets", "cleaned_english_tweets", "sentiment"]]
     df_short_html = df_short.to_html
     # Dataframe which shows the top 5 Tweeters within the pulled data, based on highest follower count.
     df_top = df[["user_screen_name", "follower_count"]].nlargest(5, "follower_count")
@@ -70,14 +54,12 @@ def prediction(request):
     count_neutral = int(np.sum(df['sentiment'] == 0))
     count_negative = int(np.sum(df['sentiment'] < 0))
 
-
     if request.method == 'POST':
         return render(request, 'prediction.html', {'df_short_html': df_short_html, "sentiment_average": sentiment_average,
                                                    "input_num_terms": input_num_terms, "input_hashtag": input_hashtag,
                                                    "tweet_duration": tweet_duration, "df_top_html": df_top_html,
-                                                   "clean_tweet": clean_tweet, "count_positive": count_positive,
-                                                   "count_neutral": count_neutral, "count_negative": count_negative,
-                                                   "clean_tweet": clean_tweet})
+                                                   "count_positive": count_positive, "count_neutral": count_neutral,
+                                                   "count_negative": count_negative})
 
 
 def Contact(request):
