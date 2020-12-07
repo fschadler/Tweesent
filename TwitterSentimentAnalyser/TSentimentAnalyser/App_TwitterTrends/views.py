@@ -30,3 +30,6 @@ def trends_form_view(request):
     input_location = request.POST.get("location", None)
     context["input_location"] = input_location
     return render(request, 'home.html', context)
+
+def FAQ(request):
+    return render(request, 'FAQ.html', {})
