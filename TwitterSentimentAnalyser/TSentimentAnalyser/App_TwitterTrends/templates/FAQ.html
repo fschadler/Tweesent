@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>This is FAQ page</title>
+    <div class="box">
+   <p class="heading">FAQs</p>
+   <div class="faqs">
+      <details>
+         <summary>What is Twitter Sentiment Analysis?</summary>
+         <p class="text"> Sentiment Analysis is a technique used in text mining. It may, therefore, be described as a text mining technique for analyzing the underlying sentiment of a text message, i.e., a tweet. Twitter sentiment or opinion expressed through it may be positive, negative or neutral.</p>
+      </details>
+      <details>
+         <summary>How this website works?</summary>
+         <p class="text">You have to write a word or enter a hashtag for which you would like to get sentiments. You also have to enter the number of tweets and then click on submit button.</p>
+      </details>
+      <details>
+         <summary>Whom should I contact for further information or queries?</summary>
+         <p class="text">For further information or queries, you can find our contact information at the contact page.</p>
+      </details>
+<style>
+     @import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+
+body{
+   background: #f6f6f6;
+}
+
+.box{
+   width: 600px;
+   margin: 100px auto;
+   background: #eceff1;
+   border-radius: 7px;
+   box-shadow: 5px 10px 15px rgba(0,0,0,.3);
+}
+
+.box .heading{
+   background: #29b6f6;
+   border-radius: 7px 7px 0px 0px;
+   padding: 10px;
+   color:#ffffff ;
+   text-align: center
+   font-family: "Rubik";
+}
+
+.faqs{
+   padding: 10px 40px 40px;
+}
+
+::-webkit-details-marker{
+   float: right;
+   margin-top: 10px;
+}
+
+details{
+   background: #ffffff;
+   padding: 10px 20px;
+   border-radius: 7px;
+   margin-top: 20px;
+   font-family: "Rubik";
+   font-size: 18px;
+   letter-spacing: 1px;
+   cursor: pointer;
+}
+
+details summary{
+   outline: none;
+}
+
+</style>
+
+   </div>
+</div>
+</head>
+<body>
+
+
+</body>
+</html>
+{% endblock %}
