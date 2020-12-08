@@ -1,35 +1,17 @@
 
 {% extends "base.html" %}
 {% block content %}
-{% load static %}
 <html lang="en">
 <head>
-	<title>Contact V1</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->
-   <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-<!--===============================================================================================-->
-
-
-</head>
-<body>
-
-	<div class="contact1">
-		<div class="container-contact1">
-			<div class="contact1-pic js-tilt" data-tilt>
-				<img src="{% static 'images/img-01.png' %}" alt="IMG">
-			</div>
-
-			<form class="contact1-form validate-form">
-				<span class="contact1-form-title">
-					Get in touch
-				</span>
-
-				<table>
+    <meta charset="UTF-8">
+    <title>This is Contact page</title>
+    <div class="box">
+   <p class="heading">Get in touch</p>
+   <div class="Get in touch">
+	      <table>
 					<tr>
 						<td>Email</td>
-						<td>gurpreet.kaur@uni.li</td>
+						<td>info@uni.li</td>
 					</tr>
 					<tr>
 						<td>Phone</td>
@@ -37,12 +19,52 @@
 					</tr>
 					<tr>
 						<td>Address</td>
-						<td>9490 Vaduz,Liechtenstein</td>
+						<td>Fürst-Franz-Josef-Strasse, 9490 Vaduz, Liechtenstein</td>
+					</tr>
+			        <tr>
+						<td>Working Hours</td>
+						<td>Monday-Friday, 8am-5pm</td>
 					</tr>
 				</table>
-			</form>
-		</div>
-	</div>
-</body>
+<style>
+    body{
+   background: #f6f6f6;
+}
+
+.box{
+   width: 600px;
+   margin: 100px auto;
+   background: #eceff1;
+   border-radius: 7px;
+   box-shadow: 5px 10px 15px rgba(0,0,0,.3);
+}
+
+.box .heading{
+   background: #29b6f6;
+   border-radius: 7px 7px 0px 0px;
+   padding: 10px;
+   color:#ffffff ;
+   text-align: center
+   font-family: "Rubik";
+}
+
+.Get in touch{
+   padding: 10px 40px 40px;
+}
+
+details{
+   background: #ffffff;
+   padding: 10px 20px;
+   border-radius: 7px;
+   margin-top: 20px;
+   font-family: "Rubik";
+   font-size: 18px;
+   letter-spacing: 1px;
+   cursor: pointer;
+}
+</style>
+   </div>
+</div>
+</head>
 </html>
 {% endblock %}
