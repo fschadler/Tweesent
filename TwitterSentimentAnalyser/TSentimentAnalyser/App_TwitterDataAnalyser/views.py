@@ -2,6 +2,7 @@ from django.shortcuts import render
 from App_TwitterDataCollector.views import TwitterClient
 from App_TwitterDataframe.views import TweetToDataframe
 import numpy as np
+import pandas as pd
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
@@ -33,8 +34,9 @@ def prediction(request):
     Dataframes for HTML: 
     """
     # Creates a slimmer Dataframe Table for the Output Page
-    df_short = df[["tweets", "cleaned_english_tweets", "sentiment"]]
+    df_short = df[["tweets", "sentiment"]]
     df_short_html = df_short.to_html
+
     # Dataframe which shows the top 5 Tweeters within the pulled data, based on highest follower count.
     df_top = df[["user_screen_name", "follower_count"]].nlargest(5, "follower_count")
     df_top_html = df_top.to_html(index=False, header=False)
@@ -53,13 +55,18 @@ def prediction(request):
     count_positive = int(np.sum(df['sentiment'] > 0))
     count_neutral = int(np.sum(df['sentiment'] == 0))
     count_negative = int(np.sum(df['sentiment'] < 0))
+    # Descriptive Statistics
+    min_sentiment = df["sentiment"].min
+    max_sentiment = df["sentiment"].max
+    std_sentiment = round(df["sentiment"].std(), 2)
 
     if request.method == 'POST':
         return render(request, 'prediction.html', {'df_short_html': df_short_html, "sentiment_average": sentiment_average,
                                                    "input_num_terms": input_num_terms, "input_hashtag": input_hashtag,
                                                    "tweet_duration": tweet_duration, "df_top_html": df_top_html,
                                                    "count_positive": count_positive, "count_neutral": count_neutral,
-                                                   "count_negative": count_negative})
+                                                   "count_negative": count_negative, "min_sentiment": min_sentiment,
+                                                   "max_sentiment": max_sentiment, "std_sentiment": std_sentiment})
 
 
 def Contact(request):
