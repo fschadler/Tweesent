@@ -2,6 +2,9 @@ from django.shortcuts import render
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 import matplotlib.pyplot as plt
 
+"""
+This app is used to generate WordClouds which are displayed on the Output Page.
+"""
 
 def word_cloud(list_of_tweets):
     stopwords = set(STOPWORDS)
@@ -11,5 +14,12 @@ def word_cloud(list_of_tweets):
     plt.figure(figsize=(12, 10))
     plt.axis('off')
     plt.imshow(wordcloud, interpolation="bilinear");
+
+
+def word_cloud_hashtag(df):
+    #@ Florin, could you also add the Hashtag Wordcloud? Following List includes all used Hashtags in the tweets
+    hashtag_list_tweets = df["tweets"].str.findall(r"#(\w+)").sum()
+
+
 
 # Create your views here.

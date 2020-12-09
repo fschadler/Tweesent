@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from App_TwitterDataCollector.forms import *
 
+"""
+This app is used to generate the Trends on the HomePage.
+"""
+
 class GetLocationBasedTrends:
 
     def get_location_and_trends(self, request):  # input needs to be string

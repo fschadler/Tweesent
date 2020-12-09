@@ -2,14 +2,13 @@ from django.shortcuts import render
 from App_TwitterDataCollector.views import TwitterClient
 from App_TwitterDataframe.views import TweetToDataframe
 import numpy as np
-import pandas as pd
-from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 """
 Class to create variables and dataframes which are rendered on the output page. 
 """
 analyzer = SentimentIntensityAnalyzer()
+
 
 def prediction(request):
 
@@ -59,6 +58,8 @@ def prediction(request):
     min_sentiment = df["sentiment"].min
     max_sentiment = df["sentiment"].max
     std_sentiment = round(df["sentiment"].std(), 2)
+
+
 
     if request.method == 'POST':
         return render(request, 'prediction.html', {'df_short_html': df_short_html, "sentiment_average": sentiment_average,
