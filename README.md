@@ -10,7 +10,9 @@ In a next step the most used words are displayed in a word cloud and the most us
 The sentiment-score lies in between -1 and +1 and is classified as follows:
 
 A tweet in between +1 and +0.05 is positive.
+
 A tweet in between +0.05 and -0.05 is neutral.
+
 A tweet in between -0.05 and -1 is negative.
 
 Check the VADER Github page for more information how the score is calculated:
