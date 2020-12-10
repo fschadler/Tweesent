@@ -1,0 +1,11 @@
+Django
+tweepy
+numpy
+matplotlib
+pandas
+vaderSentiment
+textblob
+geopy
+google_trans_new
+wordcloud
+
