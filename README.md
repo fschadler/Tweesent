@@ -24,3 +24,4 @@ https://github.com/cjhutto/vaderSentiment
 1. Create a Virtual environment and install all necessary packages via  `pip install -r requirements.txt`
 2. Fill in your Twitter API keys in `twitter_credentials.py`
 3. Run django server `python manage.py runserver`
+4. Get started!
