@@ -17,12 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 from App_TwitterDataCollector.views import show
 from App_TwitterDataAnalyser.views import prediction
+from App_WordCloud.views import show_wordcloud
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', show),
-    path('hit',prediction),
+    path('hit', prediction),
+    path('hit', show_wordcloud),
     path('Contact', include('App_TwitterDataAnalyser.urls')),
     path('FAQ', include('App_TwitterTrends.urls')),
-    #path('Contact', Contact),
+
 ]

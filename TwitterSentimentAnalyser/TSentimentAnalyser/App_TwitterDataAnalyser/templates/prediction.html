@@ -21,6 +21,9 @@
   <h5>Positive Tweets: <var>{{count_positive}}</var></h5>
   <h5>Neutral Tweets: <var>{{count_neutral}}</var></h5>
   <h5>Negative Tweets: <var>{{count_negative}}</var></h5>
+    {% if chart %}
+        <img src="data:image/png;base64,{{ chart|safe }}">
+    {% endif %}
   <h5>Min Sentiment Score in Tweets: <var>{{min_sentiment}}</var></h5>
   <h5>Max Sentiment Score in Tweets: <var>{{max_sentiment}}</var></h5>
   <h5>Standard Deviation of Sentiment Score: <var>{{std_sentiment}}</var></h5>
@@ -36,6 +39,10 @@
 </div>
 
 </body>
-</html>
-{% endblock %}
 
+</html>
+{% endblock content%}
+
+{% block content2 %}
+
+{% endblock content2%}

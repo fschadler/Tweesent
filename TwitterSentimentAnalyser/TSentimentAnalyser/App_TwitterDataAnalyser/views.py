@@ -3,6 +3,8 @@ from App_TwitterDataCollector.views import TwitterClient
 from App_TwitterDataframe.views import TweetToDataframe
 import numpy as np
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import matplotlib.pyplot as plt
+from .utils import get_plot
 
 """
 Class to create variables and dataframes which are rendered on the output page. 
@@ -59,6 +61,15 @@ def prediction(request):
     max_sentiment = df["sentiment"].max
     std_sentiment = round(df["sentiment"].std(), 2)
 
+    """
+    Pie chart generation
+    """
+    labels = "positive", "neutral", "negative"
+    x = [count_positive,count_neutral,count_negative]
+    chart = get_plot(x)
+
+
+
 
 
     if request.method == 'POST':
@@ -67,7 +78,8 @@ def prediction(request):
                                                    "tweet_duration": tweet_duration, "df_top_html": df_top_html,
                                                    "count_positive": count_positive, "count_neutral": count_neutral,
                                                    "count_negative": count_negative, "min_sentiment": min_sentiment,
-                                                   "max_sentiment": max_sentiment, "std_sentiment": std_sentiment})
+                                                   "max_sentiment": max_sentiment, "std_sentiment": std_sentiment,
+                                                   "chart": chart})
 
 
 def Contact(request):
