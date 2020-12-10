@@ -20,3 +20,19 @@ def get_plot(x):
 
     graph = get_graph()
     return graph
+
+def get_wordcloud(y):
+    plt.switch_backend("AGG")
+    plt.figure(figsize=(6.4,4.8))
+    plt.axis("off")
+    plt.imshow(y, interpolation="bilinear")
+    word_cloud = get_graph()
+    return word_cloud
+
+def get_hashtagcloud(z):
+    plt.switch_backend("AGG")
+    plt.figure(figsize=(6.4,4.8))
+    plt.axis("off")
+    plt.imshow(z, interpolation="bilinear")
+    hashtag_cloud = get_graph()
+    return hashtag_cloud

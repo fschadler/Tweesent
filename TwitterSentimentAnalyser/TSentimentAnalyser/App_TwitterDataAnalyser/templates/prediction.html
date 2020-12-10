@@ -37,7 +37,14 @@
     {{ df_short_html | safe }}
   </div>
 </div>
-
+<h4>WordCloud</h4>
+{% if word_cloud %}
+    <img src="data:image/png;base64,{{ word_cloud|safe }}">
+{% endif %}
+<h4>HashtagCloud</h4>
+{% if word_cloud %}
+    <img src="data:image/png;base64,{{ hashtag_cloud|safe }}">
+{% endif %}
 </body>
 
 </html>
