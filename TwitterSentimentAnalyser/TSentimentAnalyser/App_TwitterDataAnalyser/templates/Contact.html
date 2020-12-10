@@ -1,73 +1,52 @@
-
 {% extends "base.html" %}
 {% block content %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>This is Contact page</title>
-    <div class="box">
-   <h5 class="heading">Any questions? Contact us</h5>
-   <div class="Get in touch">
-	      <table>
-					<tr>
-						<td>Email</td>
-						<td>info@uni.li</td>
-					</tr>
-					<tr>
-						<td>Phone</td>
-						<td>+4232651111</td>
-					</tr>
-					<tr>
-						<td>Address</td>
-						<td>Fürst-Franz-Josef-Strasse, 9490 Vaduz, Liechtenstein</td>
-					</tr>
-			        <tr>
-						<td>Working Hours</td>
-						<td>Monday-Friday, 8am-5pm</td>
-					</tr>
-				</table>
-<style>
-    body{
-   background: #f6f6f6;
-}
+{% load static %}
 
-.box{
-   width: 1500px;
-   margin: 10px auto;
-   background: #eceff1;
-   border-radius: 7px;
-   box-shadow: 5px 10px 15px rgba(0,0,0,.3);
-}
+  <!-- Header -->
+  <header class="bg-primary py-5 mb-5">
+    <div class="container h-100">
+      <div class="row h-100 align-items-center">
+        <div class="col-lg-12">
+          <h1 class="display-4 text-white mt-5 mb-2">Contact Page</h1>
+        </div>
+      </div>
+    </div>
+  </header>
 
-.box .heading{
-   background: #29b6f6;
-   border-radius: 7px 7px 0px 0px;
-   padding: 10px;
-   color:#ffffff ;
-   text-align: center
-   font-family: "Rubik";
-}
-
-.Get in touch{
-   padding: 10px 40px 40px;
-}
-
-details{
-   background: #ffffff;
-   padding: 10px 20px;
-   border-radius: 7px;
-   margin-top: 20px;
-   font-family: "Rubik";
-   font-size: 18px;
-   letter-spacing: 1px;
-   cursor: pointer;
-}
-
-</style>
-   </div>
-</div>
+  <!-- Page Content -->
 
 
-</head>
+  <div class="container">
+
+	  <div class="row">
+		<div class="col-md-12 mb-5">
+		<h2>Did you check out our <a href="http://127.0.0.1:8000/FAQ">FAQ Page</a>?</h2>
+		</div>
+  	</div>
+
+    <div class="row">
+		<div class="col-md-12 mb-4">
+		<h2>Need more Information or do you have any further Questions? Contact Us!</h2>
+		<hr>
+        <address>
+          <strong>UniLi Twitter Sentiment Dev Team</strong>
+          <br>Fürst-Franz-Josef-Strasse
+          <br>9490 Vaduz
+          <br>Liechtenstein
+          <br>
+        </address>
+        <address>
+          <abbr title="Phone">P:</abbr>
+          +423 265 1111
+          <br>
+          <abbr title="Email">E:</abbr>
+          <a href="mailto:#">info@uni.li</a>
+        </address>
+		</div>
+  	</div>
+
+
+
+  </div>
 </html>
 {% endblock %}
