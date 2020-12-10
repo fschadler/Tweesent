@@ -3,8 +3,8 @@ from App_TwitterDataCollector.views import TwitterClient
 from App_TwitterDataframe.views import TweetToDataframe
 import numpy as np
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import matplotlib.pyplot as plt
-from .utils import get_plot
+from wordcloud import WordCloud, STOPWORDS
+from .utils import get_plot, get_wordcloud, get_hashtagcloud
 
 """
 Class to create variables and dataframes which are rendered on the output page. 
@@ -62,13 +62,29 @@ def prediction(request):
     std_sentiment = round(df["sentiment"].std(), 2)
 
     """
-    Pie chart generation
+    Pie Chart Generation
     """
-    labels = "positive", "neutral", "negative"
+
     x = [count_positive,count_neutral,count_negative]
     chart = get_plot(x)
 
+    """
+    WordCloud Generation
+    """
+    stopwords = set(STOPWORDS)
+    all_words = ' '.join([text for text in list_of_cleaned_english_tweets])
+    y = WordCloud(background_color='white', stopwords=stopwords, width=1600, height=800, random_state=21,
+                          colormap='jet', max_words=50, max_font_size=200).generate(all_words)
 
+    hashtag_list_tweets = list(df["tweets"].str.findall(r"#(\w+)").sum())
+    all_hashtags = ' '.join([hashtag for hashtag in hashtag_list_tweets])
+    z = WordCloud(background_color='white', stopwords=stopwords, width=1600, height=800, random_state=21,
+                          colormap='jet', max_words=50, max_font_size=200).generate(all_hashtags)
+
+    word_cloud = get_wordcloud(y)
+
+
+    hashtag_cloud = get_hashtagcloud(z)
 
 
 
@@ -79,7 +95,7 @@ def prediction(request):
                                                    "count_positive": count_positive, "count_neutral": count_neutral,
                                                    "count_negative": count_negative, "min_sentiment": min_sentiment,
                                                    "max_sentiment": max_sentiment, "std_sentiment": std_sentiment,
-                                                   "chart": chart})
+                                                   "chart": chart, "word_cloud": word_cloud, "hashtag_cloud": hashtag_cloud})
 
 
 def Contact(request):
