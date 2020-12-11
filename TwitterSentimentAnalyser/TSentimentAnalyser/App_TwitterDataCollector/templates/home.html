@@ -35,16 +35,18 @@
 				<form action="." method="post">
 					{% csrf_token %}
          			{{ location.as_p }}
-         			<button class="btn btn-primary btn btn-light" type="Submit">Submit</button>
+         			<button class="btn btn-primary btn btn-light" type="Submit" data-toggle="collapse" data-target="#showcase">Submit</button>
 				</form>
 			</div>
 		</div>
 		<div class="col-md-4 mb-5">
-  		<h2>Top 10 Trends for: {{input_location}}</h2>
-		<hr>
-			{% for trend in top10_trends %}
-			{{ trend }}<br>
-			{% endfor %}
+			<div id="showcase" class="collapse">
+  				<h2>Top 10 Trends for: {{input_location}}</h2>
+				<hr>
+				{% for trend in top10_trends %}
+				{{ trend }}<br>
+				{% endfor %}
+			</div>
 		</div>
   	</div>
 
@@ -64,4 +66,3 @@
   <!-- /.container -->
 
 {% endblock %}
-</html>
