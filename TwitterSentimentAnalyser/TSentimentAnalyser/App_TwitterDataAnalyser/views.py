@@ -19,8 +19,6 @@ def prediction(request):
     df = tweet_df.tweets_to_data_frame(tweets)
 
     # Adds the sentiment Score to the Dataframe based on cleaned and translated Tweets
-#    df['sentiment'] = df['cleaned_english_tweets'].apply(lambda tweet: TextBlob(tweet).sentiment.polarity)
-#    df['sentiment'] = np.round(df['sentiment'], decimals=2)
     df['sentiment'] = [analyzer.polarity_scores(x)['compound'] for x in df['cleaned_english_tweets']]
     df['sentiment'] = np.round(df['sentiment'], decimals=2)
 
@@ -47,7 +45,7 @@ def prediction(request):
     # Variable to display the average sentiment score.
     sentiment_average = round(sum(df["sentiment"]) / len(df["sentiment"]), 1)
     # Variable to display how many Tweets the user has requested.
-    input_num_terms = (request.POST['num_terms'])
+    input_num_terms = len(df["tweets"])
     # Variable to display which search term the user has requested.
     input_hashtag = request.POST['hashtag']
     # Variable to display what time range the Tweets are based of.
@@ -60,6 +58,13 @@ def prediction(request):
     min_sentiment = df["sentiment"].min
     max_sentiment = df["sentiment"].max
     std_sentiment = round(df["sentiment"].std(), 2)
+
+    if sentiment_average <= -0.05:
+        sentiment_describe = "negative"
+    elif sentiment_average > 0.05:
+        sentiment_describe = "positive"
+    else:
+        sentiment_describe = "neutral"
 
     """
     Pie Chart Generation
@@ -95,7 +100,8 @@ def prediction(request):
                                                    "count_positive": count_positive, "count_neutral": count_neutral,
                                                    "count_negative": count_negative, "min_sentiment": min_sentiment,
                                                    "max_sentiment": max_sentiment, "std_sentiment": std_sentiment,
-                                                   "chart": chart, "word_cloud": word_cloud, "hashtag_cloud": hashtag_cloud})
+                                                   "chart": chart, "word_cloud": word_cloud, "hashtag_cloud": hashtag_cloud,
+                                                   "sentiment_describe": sentiment_describe})
 
 
 def Contact(request):

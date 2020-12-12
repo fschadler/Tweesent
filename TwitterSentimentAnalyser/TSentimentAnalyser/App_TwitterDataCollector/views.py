@@ -98,7 +98,8 @@ Displays the home.html where a user can input their hashtag and number of Tweets
 
 
 def show(request):
-    form = TwitterForm()
+    hashtag_form = HashtagForm()
+    num_form = NumForm()
     location = LocationForm()
 
     if request.POST.get("location") != None:
@@ -116,7 +117,7 @@ def show(request):
                 top10_trends.append(trend["name"])
         except tweepy.error.TweepError:
             print("There are no trending topics in your location.")
-        return render(request, 'home.html', {'ff': form, 'location': location, 'input_location': input_location,
-                                             'top10_trends': top10_trends})
+        return render(request, 'home.html', {'hashtag_form': hashtag_form, "num_form": num_form, 'location': location,
+                                             'input_location': input_location, 'top10_trends': top10_trends})
     else:
-        return render(request, 'home.html', {'ff': form, 'location': location})
+        return render(request, 'home.html', {'hashtag_form': hashtag_form, "num_form": num_form, 'location': location})

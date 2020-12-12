@@ -17,69 +17,103 @@
   <!-- Page Content -->
 
 
-  <div class="container">
-    <div class="row">
-		<div class="col-md-12 mb-2">
-		<h2>Lets have a first look at your results</h2>
-		<hr>
-		</div>
-  	</div>
-
-    <div class="row">
-      <div class=" col-md-6">
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <div class="card text-center">
-              <div class="card-body">
-                <h4 class="card-title">Pulled Tweets</h4>
-                <h5 class="card-text">{{input_num_terms}}</h5>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <div class="card text-center">
-              <div class="card-body">
-                <h4 class="card-title">Sentiment Score</h4>
-                <h5 class="card-text">{{sentiment_average}}</h5>
-              </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 mb-2">
+      <h2>Lets have a first look at your results</h2>
+      <hr>
+    </div>
+  </div>
+  <div class="row">
+    <!-- Column 1 -->
+    <div class="col-md-5">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Pulled Tweets</h5>
+              <h5 class="card-text">{{input_num_terms}}</h5>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <div class="card text-center">
-              <div class="card-body">
-                <h4 class="card-title">Max Tweet Score</h4>
-                <h5 class="card-text">{{max_sentiment}}</h5>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <div class="card text-center">
-              <div class="card-body">
-                <h4 class="card-title">Min Tweet Score</h4>
-                <h5 class="card-text">{{min_sentiment}}</h5>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 mb-4">
-            <div class="card text-center">
-              <div class="card-body">
-                <h4 class="card-title">Time duration</h4>
-                <h5 class="card-text">{{tweet_duration}}</h5>
-              </div>
+        <div class="col-md-6 mb-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Sentiment Score</h5>
+              <h5 class="card-text">{{sentiment_average}}</h5>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6 mb-4">
-        <div class="card border-0">
-          <img class="card-img-top" src="data:image/png;base64,{{ chart|safe }}">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Max Tweet Score</h5>
+              <h5 class="card-text">{{max_sentiment}}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Min Tweet Score</h5>
+              <h5 class="card-text">{{min_sentiment}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-5">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Time duration</h5>
+              <h5 class="card-text">{{tweet_duration}}</h5>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <!-- Column 2 -->
+    <div class="col-md-5 mb-4">
+      <div class="card border-0">
+        <img class="card-img-top" src="data:image/png;base64,{{ chart|safe }}">
+      </div>
+    </div>
+    <!-- Column 3 -->
+    <div class="col-md-2 mb-4">
+      <div class ="row">
+        <div class="col-md-12 mb-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Positive</h5>
+              <h5 class="card-text">{{count_positive}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class ="row">
+        <div class="col-md-12 mb-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Neutral</h5>
+              <h5 class="card-text">{{count_neutral}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class ="row">
+        <div class="col-md-12 mb-5">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Negative</h5>
+              <h5 class="card-text">{{count_negative}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="container">
@@ -87,11 +121,12 @@
       <div class="col-md-7">
         <h2>What does this Sentiment Score mean?</h2>
         <hr>
-        <div class="card border-0 mb-5">
-          <h5 class="card-text">The sentiment-score lies in between -1 and +1 and is classified as follows:</h5>
-		<h5 class="card-text">A tweet in between +1 and +0.05 is positive.</h5>
-        <h5 class="card-text">A tweet in between +0.05 and -0.05 is neutral.</h5>
-        <h5 class="card-text">A tweet in between -0.05 and -1 is negative.</h5>
+        <div class="card border-0 mb-5 d-flex justify-content-center">
+          <h5 class="card-text">In general, the sentiment score lies in between -1 and +1:</h5>
+          <h5 class="card-text">A tweet in between +1 and +0.05 is positive.</h5>
+          <h5 class="card-text">A tweet in between +0.05 and -0.05 is neutral.</h5>
+          <h5 class="card-text">A tweet in between -0.05 and -1 is negative.</h5>
+          <h5>Your sentiment score is {{sentiment_average}}, which means that people on Twitter are using {{sentiment_describe}} words associated with {{input_hashtag}}.</h5>
         </div>
   	  </div>
       <div class="col-md-5">
@@ -101,10 +136,9 @@
           <div class="text-justify">
             {{ df_top_html | safe }}
           </div>
+        </div>
       </div>
-    </div>
-  	  </div>
-    </div>
+  	</div>
 </div>
 
 <div class="container">
@@ -136,22 +170,11 @@
       <div class="col-md-12">
         <h5>Use the button below to display all pulled Tweets.</h5>
         <br>
-        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#showcase">Expand / Collapse</button>
+        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#showcase">Expand / Collapse</button>
         <div id="showcase" class="collapse">
           {{ df_short_html | safe }}
         </div>
   	  </div>
+  <br>
 </div>
-
-
-
-    <!-- /.row -->
-
-
-
-  <h5>Positive Tweets: <var>{{count_positive}}</var></h5>
-  <h5>Neutral Tweets: <var>{{count_neutral}}</var></h5>
-  <h5>Negative Tweets: <var>{{count_negative}}</var></h5>
-  <h5>Standard Deviation of Sentiment Score: <var>{{std_sentiment}}</var></h5>
-
 {% endblock content%}

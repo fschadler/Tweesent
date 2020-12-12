@@ -3,13 +3,21 @@ from django.core.validators import RegexValidator
 
 
 
-class TwitterForm(forms.Form):
+class HashtagForm(forms.Form):
      """
      User Input on homepage which is used to filter tweet-search.
      """
-     hashtag = forms.CharField(label='Hashtag or Word', max_length=30, widget=forms.TextInput
-                                (attrs={'placeholder': '#Sentiment', "class": "form-control"}))
-     num_terms = forms.CharField(label='Number of Tweets', widget=forms.NumberInput(attrs={'placeholder': '100',"min": 1, "max": 500, "class": "form-control"}))
+     hashtag = forms.CharField(label='', max_length=30, widget=forms.TextInput
+                                (attrs={"class": "form-control"}))
+
+
+
+class NumForm(forms.Form):
+    """
+    User Input on homepage which is used to filter tweet-search.
+    """
+    num_terms = forms.CharField(label='', widget=forms.NumberInput(
+        attrs={"min": 1, "max": 500, "class": "form-control"}))
 
 class LocationForm(forms.Form):
     """
