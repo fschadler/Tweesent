@@ -23,6 +23,6 @@ urlpatterns = [
     path('', show),
     path('hit', prediction),
     path('Contact', include('App_TwitterDataAnalyser.urls')),
-    path('FAQ', include('App_TwitterTrends.urls')),
+    path('FAQ', include('App_TwitterDataAnalyser.urls')),
 
 ]
