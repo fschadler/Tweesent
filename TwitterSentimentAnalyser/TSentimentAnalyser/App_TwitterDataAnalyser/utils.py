@@ -16,7 +16,7 @@ def get_plot(x):
     plt.switch_backend("AGG")
     plt.figure(figsize=(6.4, 4.8))
     plt.title("Distribution of Sentiment")
-    plt.pie(x, labels=["positve","neutral","negative"],colors=("blue","lightblue","darkblue"))
+    plt.pie(x, labels=["positve","neutral","negative"],colors=("#4caf50","#2196f3","#f44336"))
 
     graph = get_graph()
     return graph
