@@ -22,10 +22,7 @@ def prediction(request):
     df['sentiment'] = [analyzer.polarity_scores(x)['compound'] for x in df['cleaned_english_tweets']]
     df['sentiment'] = np.round(df['sentiment'], decimals=2)
 
-    # Do we still need those lists? @Florin
-    list_of_tweets = list(df["tweets"])
-    list_of_cleaned_tweets = list(df["cleaned_tweets"])
-    list_of_english_tweets = list(df["english_tweets"])
+    #list for wordcloud generation
     list_of_cleaned_english_tweets = list(df["cleaned_english_tweets"])
 
     """
@@ -88,7 +85,6 @@ def prediction(request):
 
     word_cloud = get_wordcloud(y)
 
-
     hashtag_cloud = get_hashtagcloud(z)
 
 
@@ -106,3 +102,6 @@ def prediction(request):
 
 def Contact(request):
     return render(request, 'Contact.html', {})
+
+def FAQ(request):
+    return render(request, 'FAQ.html', {})
