@@ -1,18 +1,18 @@
 from django.shortcuts import render
 from App_TwitterDataCollector.views import TwitterClient
 from App_TwitterDataframe.views import TweetToDataframe
+from App_ChartCreator.views import pie_chart_gen, hashtag_cloud_gen, word_cloud_gen
 import numpy as np
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from wordcloud import WordCloud, STOPWORDS
-from .utils import get_plot, get_wordcloud, get_hashtagcloud
+
 
 """
 Class to create variables and dataframes which are rendered on the output page. 
 """
-analyzer = SentimentIntensityAnalyzer()
 
-def prediction(request):
 
+def analysis(request):
+    analyzer = SentimentIntensityAnalyzer()
     twitter_client = TwitterClient()
     tweet_df = TweetToDataframe()
     tweets = twitter_client.get_tweets(request)
@@ -22,12 +22,11 @@ def prediction(request):
     df['sentiment'] = [analyzer.polarity_scores(x)['compound'] for x in df['cleaned_english_tweets']]
     df['sentiment'] = np.round(df['sentiment'], decimals=2)
 
-    #list for wordcloud generation
-    list_of_cleaned_english_tweets = list(df["cleaned_english_tweets"])
 
     """
     Dataframes for HTML: 
     """
+
     # Creates a slimmer Dataframe Table for the Output Page
     df_short = df[["tweets", "sentiment"]]
     df_short_html = df_short.to_html(classes="table table-borderless table-hover table-striped", border=0, justify="left")
@@ -44,7 +43,7 @@ def prediction(request):
     # Variable to display how many Tweets the user has requested.
     input_num_terms = len(df["tweets"])
     # Variable to display which search term the user has requested.
-    input_hashtag = request.POST['hashtag']
+    input_hashtag = request.POST['input_hashtag']
     # Variable to display what time range the Tweets are based of.
     tweet_duration = max(df["date"]) - min(df["date"])
     # Variables to display amount of positive / neutral / negative Tweets
@@ -64,39 +63,20 @@ def prediction(request):
         sentiment_describe = "neutral"
 
     """
-    Pie Chart Generation
+    Calls App_ChartCreator
     """
-
-    x = [count_positive,count_neutral,count_negative]
-    chart = get_plot(x)
-
-    """
-    WordCloud Generation
-    """
-    stopwords = set(STOPWORDS)
-    all_words = ' '.join([text for text in list_of_cleaned_english_tweets])
-    y = WordCloud(background_color='white', stopwords=stopwords, width=1600, height=800, random_state=21,
-                          colormap='jet', max_words=50, max_font_size=200).generate(all_words)
-
-    hashtag_list_tweets = list(df["tweets"].str.findall(r"#(\w+)").sum())
-    all_hashtags = ' '.join([hashtag for hashtag in hashtag_list_tweets])
-    z = WordCloud(background_color='white', stopwords=stopwords, width=1600, height=800, random_state=21,
-                          colormap='jet', max_words=50, max_font_size=200).generate(all_hashtags)
-
-    word_cloud = get_wordcloud(y)
-
-    hashtag_cloud = get_hashtagcloud(z)
-
-
+    word_cloud = word_cloud_gen(df)
+    hashtag_cloud = hashtag_cloud_gen(df)
+    chart = pie_chart_gen(count_positive, count_neutral, count_negative)
 
     if request.method == 'POST':
-        return render(request, 'prediction.html', {'df_short_html': df_short_html, "sentiment_average": sentiment_average,
+        return render(request, 'analysis.html', {'df_short_html': df_short_html, "sentiment_average": sentiment_average,
                                                    "input_num_terms": input_num_terms, "input_hashtag": input_hashtag,
                                                    "tweet_duration": tweet_duration, "df_top_html": df_top_html,
                                                    "count_positive": count_positive, "count_neutral": count_neutral,
                                                    "count_negative": count_negative, "min_sentiment": min_sentiment,
                                                    "max_sentiment": max_sentiment, "std_sentiment": std_sentiment,
-                                                   "chart": chart, "word_cloud": word_cloud, "hashtag_cloud": hashtag_cloud,
+                                                    "word_cloud": word_cloud, "hashtag_cloud": hashtag_cloud, "chart": chart,
                                                    "sentiment_describe": sentiment_describe})
 
 

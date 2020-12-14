@@ -21,11 +21,11 @@ class TwitterClient:
         return self.twitter_client
 
     def get_tweets(self, request):
-        t = request.POST['hashtag']
-        n = int(request.POST['num_terms'])
+        input_hashtag = request.POST['input_hashtag']
+        input_num = int(request.POST['input_num'])
         twitter_client = TwitterClient()
         api = twitter_client.get_twitter_client_api()
-        tweets = [status for status in tweepy.Cursor(api.search, q=t).items(n)]
+        tweets = [status for status in tweepy.Cursor(api.search, q=input_hashtag).items(input_num)]
         return tweets
 
 
@@ -73,9 +73,11 @@ class TwitterListener(tweepy.StreamListener):
             return False
         print(status)
 
+
 """
-Displays the home.html where a user can input their hashtag and number of Tweets.
+Displays the home.html where the user can input their hashtag and number of Tweets.
 """
+
 
 def show(request):
     hashtag_form = HashtagForm()
@@ -83,7 +85,7 @@ def show(request):
     location = LocationForm()
 
     if request.POST.get("location") != None:
-        input_location = request.POST.get("location")
+        input_location = request.POST.get("input_location")
         geolocator = Nominatim(user_agent="TweetAnalyser")
         loc = geolocator.geocode(input_location)
         twitter_client = TwitterClient()

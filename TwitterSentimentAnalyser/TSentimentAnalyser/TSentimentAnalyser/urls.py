@@ -16,12 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from App_TwitterDataCollector.views import show
-from App_TwitterDataAnalyser.views import prediction, Contact, FAQ
+from App_TwitterDataAnalyser.views import analysis, Contact, FAQ
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', show),
-    path('hit', prediction),
+    path('analysis', analysis),
     path('Contact', Contact),
     path('FAQ', FAQ),
 

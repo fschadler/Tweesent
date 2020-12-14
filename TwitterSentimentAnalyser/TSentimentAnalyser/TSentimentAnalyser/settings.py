@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "App_TwitterDataAnalyser",
     "App_TwitterDataCollector",
     "App_TwitterDataframe",
+    "App_ChartCreator",
     
 ]
 
