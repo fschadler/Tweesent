@@ -8,4 +8,4 @@ textblob
 geopy
 google_trans_new
 wordcloud
-
+penpyxl
