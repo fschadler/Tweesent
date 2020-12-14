@@ -166,15 +166,22 @@
         <h2>Want to know more about the Tweets?</h2>
         <hr>
   	  </div>
-    </div>
-      <div class="col-md-12">
-        <h5>Use the button below to display all pulled Tweets.</h5>
-        <br>
+      <div class="col-md-12 mb-3">
+        <p>Use the button below to display all pulled Tweets.</p>
         <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#showcase">Expand / Collapse</button>
         <div id="showcase" class="collapse">
           {{ df_short_html | safe }}
         </div>
+      </div>
+      <div class="col-md-12 mb-3">
+        <br><p>...or simply download the raw data as Excel file to work with it on your own.</p>
+        <form method="get" action="{% static 'raw_tweets.xlsx' %}">
+        <button type="submit" class="btn btn-primary">Download</button>
+        </form>
   	  </div>
-  <br>
+    </div>
 </div>
+
+
+
 {% endblock content%}

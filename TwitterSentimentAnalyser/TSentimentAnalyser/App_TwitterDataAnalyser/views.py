@@ -4,7 +4,7 @@ from App_TwitterDataframe.views import TweetToDataframe
 from App_ChartCreator.views import pie_chart_gen, hashtag_cloud_gen, word_cloud_gen
 import numpy as np
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
+import os
 
 """
 Class to create variables and dataframes which are rendered on the output page. 
@@ -17,6 +17,11 @@ def analysis(request):
     tweet_df = TweetToDataframe()
     tweets = twitter_client.get_tweets(request)
     df = tweet_df.tweets_to_data_frame(tweets)
+
+    """
+    Creates Dataframe CSV File
+    """
+    df.to_excel("static/raw_tweets.xlsx")
 
     # Adds the sentiment Score to the Dataframe based on cleaned and translated Tweets
     df['sentiment'] = [analyzer.polarity_scores(x)['compound'] for x in df['cleaned_english_tweets']]
