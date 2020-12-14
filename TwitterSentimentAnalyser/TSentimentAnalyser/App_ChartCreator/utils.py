@@ -2,6 +2,11 @@ import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
 
+"""
+Settings for Charts which are created in views.py.
+"""
+
+
 def get_graph():
     buffer = BytesIO()
     plt.savefig(buffer, format="png")
@@ -12,6 +17,7 @@ def get_graph():
     buffer.close()
     return graph
 
+
 def get_plot(x):
     plt.switch_backend("AGG")
     plt.figure(figsize=(6.4, 4.8))
@@ -21,6 +27,7 @@ def get_plot(x):
     graph = get_graph()
     return graph
 
+
 def get_wordcloud(y):
     plt.switch_backend("AGG")
     plt.figure(figsize=(6.4,4.8))
@@ -28,6 +35,7 @@ def get_wordcloud(y):
     plt.imshow(y, interpolation="bilinear")
     word_cloud = get_graph()
     return word_cloud
+
 
 def get_hashtagcloud(z):
     plt.switch_backend("AGG")

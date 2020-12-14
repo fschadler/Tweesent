@@ -75,20 +75,32 @@
 			{% endfor %}
 		</div>
   	</div>
-
-	<div class="row">
-
-	<div class="col-md-12 mb-5">
-        <h2>How it works - its quite simple!</h2>
-        <hr>
-        <p>Placeholder for Image that describes how to use the website</p>
-
-      </div>
-    </div>
   </div>
 
-
-
-  <!-- /.container -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 mb-2">
+      <h2>How it works - its quite simple!</h2>
+      <hr>
+    </div>
+  </div>
+	<div class="row">
+      <div class="col-md-5">
+        <div class="card border-0 mb-5 d-flex justify-content-center">
+          <p class="text-justify">All you need to do is to insert a #Hashtag or a Word in the Search field, add the number of Tweets that should be considered and hit the submit button. Just shorty after you will receive an in-depth analysation of your given #Hashtag or Term. </p>
+			<p class="text-justify"> All used Tweets are real-time data by people that are just talking about whatever topic you would like to have a look at. </p>
+        	<p class="text-justify">The maximum of Tweets that can be pulled is set to 500. This is due to the reason that the Twitter API only allows for a certain amount of Tweets to be pulled in a given period.</p>
+			<p class="text-justify">If you want to know more about Tweesent visit our <a href="http://127.0.0.1:8000/FAQ">FAQ Page</a> or <a href="http://127.0.0.1:8000/FAQ">contact us</a>.</p>
+		</div>
+  	  </div>
+      <div class="col-md-7">
+        <div class="card border-0 mb-5">
+          <div class="text-justify">
+            <img class="card-img-bottom" src="{% static 'gifs/how_to.gif' %}">
+          </div>
+        </div>
+      </div>
+  	</div>
+</div>
 
 {% endblock %}

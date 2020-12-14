@@ -84,7 +84,7 @@ def show(request):
     num_form = NumForm()
     location = LocationForm()
 
-    if request.POST.get("location") != None:
+    if request.POST.get("input_location") != None:
         input_location = request.POST.get("input_location")
         geolocator = Nominatim(user_agent="TweetAnalyser")
         loc = geolocator.geocode(input_location)

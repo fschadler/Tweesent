@@ -22,11 +22,9 @@ def analysis(request):
     df['sentiment'] = [analyzer.polarity_scores(x)['compound'] for x in df['cleaned_english_tweets']]
     df['sentiment'] = np.round(df['sentiment'], decimals=2)
 
-
     """
     Dataframes for HTML: 
     """
-
     # Creates a slimmer Dataframe Table for the Output Page
     df_short = df[["tweets", "sentiment"]]
     df_short_html = df_short.to_html(classes="table table-borderless table-hover table-striped", border=0, justify="left")

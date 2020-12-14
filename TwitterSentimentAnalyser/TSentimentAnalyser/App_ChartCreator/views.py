@@ -2,19 +2,19 @@ from wordcloud import WordCloud, STOPWORDS
 from .utils import get_plot, get_wordcloud, get_hashtagcloud
 
 """
-App to create visualisations which are displayed on the analysis.html.  
+App to create charts which are displayed on the analysis.html page.  
 """
 
 
 def pie_chart_gen(count_positive, count_neutral, count_negative):
-
+    # Creates Pie Chart with Sentiment Score
     x = [count_positive,count_neutral,count_negative]
     chart = get_plot(x)
     return chart
 
 
 def word_cloud_gen(df):
-
+    # Creates Word Cloud based on Words in Tweets, which are cleaned and translated.
     list_of_cleaned_english_tweets = list(df["cleaned_english_tweets"])
     stopwords = set(STOPWORDS)
     all_words = ' '.join([text for text in list_of_cleaned_english_tweets])
@@ -24,6 +24,7 @@ def word_cloud_gen(df):
 
 
 def hashtag_cloud_gen(df):
+    # Creates Word Cloud based on Hashtags in Tweets.
     hashtag_list_tweets = list(df["tweets"].str.findall(r"#(\w+)").sum())
     stopwords = set(STOPWORDS)
     all_hashtags = ' '.join([hashtag for hashtag in hashtag_list_tweets])
