@@ -51,3 +51,11 @@ def random_color_func(word=None, font_size=None, position=None,  orientation=Non
     l = int(53.1 * float(random_state.randint(60, 120)) / 130.0)
 
     return "hsl({}, {}%, {}%)".format(h, s, l)
+
+def get_boxplot(b):
+    plt.switch_backend("AGG")
+    plt.figure(figsize=(6.4,4.8))
+    plt.title("Distribution of Sentiment")
+    plt.boxplot(b)
+    boxplot = get_graph()
+    return boxplot

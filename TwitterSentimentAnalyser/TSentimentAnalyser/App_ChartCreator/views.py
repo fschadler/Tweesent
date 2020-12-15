@@ -1,6 +1,7 @@
 from wordcloud import WordCloud, STOPWORDS
-from .utils import get_plot, get_wordcloud, get_hashtagcloud, random_color_func
+from .utils import get_plot, get_wordcloud, get_hashtagcloud, random_color_func, get_boxplot
 import numpy as np
+import matplotlib as plt
 import random
 
 """
@@ -34,3 +35,8 @@ def hashtag_cloud_gen(df):
                           color_func=random_color_func, max_words=50, max_font_size=200).generate(all_hashtags)
 
     return get_hashtagcloud(z)
+
+def boxplot_gen(df):
+    #creates boxplot for sentiment-values
+    b = (df["sentiment"])
+    return get_boxplot(b)

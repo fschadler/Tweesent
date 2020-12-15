@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from App_TwitterDataCollector.views import TwitterClient
 from App_TwitterDataframe.views import TweetToDataframe
-from App_ChartCreator.views import pie_chart_gen, hashtag_cloud_gen, word_cloud_gen
+from App_ChartCreator.views import pie_chart_gen, hashtag_cloud_gen, word_cloud_gen, boxplot_gen
 import numpy as np
+import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from io import BytesIO
 
 """
 Class to create variables and dataframes which are rendered on the output page. 
@@ -20,7 +23,7 @@ def analysis(request):
     """
     Creates Dataframe CSV File
     """
-    df.to_excel("static/raw_tweets.xlsx")
+    #df.to_excel("static/raw_tweets.xlsx")
 
     # Adds the sentiment Score to the Dataframe based on cleaned and translated Tweets
     df['sentiment'] = [analyzer.polarity_scores(x)['compound'] for x in df['cleaned_english_tweets']]
@@ -37,6 +40,8 @@ def analysis(request):
     df_top = df[["user_screen_name", "follower_count"]].nlargest(5, "follower_count")
     df_top = (df_top.rename(columns={'user_screen_name': 'Username', 'follower_count': 'Follower Count'}))
     df_top_html = df_top.to_html(classes="table table-borderless table-hover table-striped", index=False, border=0, justify="left")
+
+
     """
     Variables for HTML:
     """
@@ -70,6 +75,7 @@ def analysis(request):
     word_cloud = word_cloud_gen(df)
     hashtag_cloud = hashtag_cloud_gen(df)
     chart = pie_chart_gen(count_positive, count_neutral, count_negative)
+    boxplot = boxplot_gen(df)
 
 
     if request.method == 'POST':
@@ -80,8 +86,7 @@ def analysis(request):
                                                    "count_negative": count_negative, "min_sentiment": min_sentiment,
                                                    "max_sentiment": max_sentiment, "std_sentiment": std_sentiment,
                                                     "word_cloud": word_cloud, "hashtag_cloud": hashtag_cloud, "chart": chart,
-                                                   "sentiment_describe": sentiment_describe})
-
+                                                    "boxplot": boxplot, "sentiment_describe": sentiment_describe})
 
 def Contact(request):
     return render(request, 'Contact.html', {})
