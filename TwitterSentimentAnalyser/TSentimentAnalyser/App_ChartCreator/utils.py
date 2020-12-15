@@ -44,3 +44,10 @@ def get_hashtagcloud(z):
     plt.imshow(z, interpolation="bilinear")
     hashtag_cloud = get_graph()
     return hashtag_cloud
+
+def random_color_func(word=None, font_size=None, position=None,  orientation=None, font_path=None, random_state=None):
+    h = int(203.0)
+    s = int(89.1)
+    l = int(53.1 * float(random_state.randint(60, 120)) / 130.0)
+
+    return "hsl({}, {}%, {}%)".format(h, s, l)

@@ -4,7 +4,6 @@ from App_TwitterDataframe.views import TweetToDataframe
 from App_ChartCreator.views import pie_chart_gen, hashtag_cloud_gen, word_cloud_gen
 import numpy as np
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import os
 
 """
 Class to create variables and dataframes which are rendered on the output page. 
@@ -71,6 +70,7 @@ def analysis(request):
     word_cloud = word_cloud_gen(df)
     hashtag_cloud = hashtag_cloud_gen(df)
     chart = pie_chart_gen(count_positive, count_neutral, count_negative)
+
 
     if request.method == 'POST':
         return render(request, 'analysis.html', {'df_short_html': df_short_html, "sentiment_average": sentiment_average,
