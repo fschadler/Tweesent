@@ -4,11 +4,12 @@ import base64
 from io import BytesIO
 
 """
-Settings for Charts which are created in views.py.
+Functions for Chart Generation
 """
 
 
 def get_graph():
+    # Encoding and decoding graph to display it on html.
     buffer = BytesIO()
     plt.savefig(buffer, format="png")
     buffer.seek(0)
@@ -20,6 +21,7 @@ def get_graph():
 
 
 def get_plot(x):
+    # Defines settings for Pie chart generation
     plt.switch_backend("AGG")
     plt.figure(figsize=(6.4, 4.8))
     plt.pie(x, labels=["positve","neutral","negative"],colors=("#4caf50","#2196f3","#f44336"),autopct='%1.1f%%')
@@ -29,6 +31,7 @@ def get_plot(x):
 
 
 def get_wordcloud(y):
+    # Defines settings for Wordcloud Chart generation
     plt.switch_backend("AGG")
     plt.figure(figsize=(6.4,4.8))
     plt.axis("off")
@@ -38,6 +41,7 @@ def get_wordcloud(y):
 
 
 def get_hashtagcloud(z):
+    # Defines settings for Hashtag Cloud Chart generation
     plt.switch_backend("AGG")
     plt.figure(figsize=(6.4,4.8))
     plt.axis("off")
@@ -46,6 +50,7 @@ def get_hashtagcloud(z):
     return hashtag_cloud
 
 def random_color_func(word=None, font_size=None, position=None,  orientation=None, font_path=None, random_state=None):
+    # Random text-color generation for Wordcloud and Hashtag Cloud
     h = int(203.0)
     s = int(89.1)
     l = int(53.1 * float(random_state.randint(60, 120)) / 130.0)
@@ -53,6 +58,7 @@ def random_color_func(word=None, font_size=None, position=None,  orientation=Non
     return "hsl({}, {}%, {}%)".format(h, s, l)
 
 def get_boxplot(b):
+    # Defines settings for Boxplot generation
     plt.switch_backend("AGG")
     plt.figure(figsize=(6.4,4.8))
     plt.axis("on")
@@ -61,6 +67,8 @@ def get_boxplot(b):
     return boxplot
 
 def get_distribution(d):
+    # Defines settings for Distribution Chart gen
+    # Switching backend due to usage of seaborn
     plt.switch_backend("AGG")
     sns.displot(data=d, x="sentiment", kde=True)
     distribution = get_graph()

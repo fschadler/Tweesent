@@ -16,7 +16,7 @@
 
   <!-- Page Content -->
 
-
+<!-- Container for First Figures and Chart -->
   <div class="container">
     <div class="row">
       <div class="col-md-12 mb-2">
@@ -67,7 +67,7 @@
           <div class="col-md-12 mb-3">
             <div class="card text-center">
               <div class="card-body">
-                <h5 class="card-title">Time Span</h5>
+                <h5 class="card-title">Time Span (Oldest to newest Tweet)</h5>
                 <h5 class="card-text">{{tweet_duration}}</h5>
               </div>
             </div>
@@ -114,39 +114,6 @@
         </div>
       </div>
     </div>
-      <div class="row">
-        <div class="col-md-12 mb-2">
-          <button type="button" class="btn btn-primary mb-3" data-toggle="collapse" data-target="#moreinfo">Additional Information</button>
-          <div id="moreinfo" class="collapse">
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <div class="card text-center">
-                  <div class="card-body">
-                    <h5 class="card-title">Newest Tweet</h5>
-                    <h5 class="card-text">{{newest_tweet}}</h5>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 mb-3">
-                <div class="card text-center">
-                  <div class="card-body">
-                    <h5 class="card-title">Sentiment Score</h5>
-                    <h5 class="card-text">{{sentiment_average}}</h5>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 mb-3">
-                <div class="card text-center">
-                  <div class="card-body">
-                    <h5 class="card-title">Sentiment Score</h5>
-                    <h5 class="card-text">{{sentiment_average}}</h5>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
   </div>
 
 <!-- Container for Boxplot and Distribution -->
@@ -156,7 +123,7 @@
           <h2>Sentiment Boxplot</h2>
           <hr>
           <div class="col-md-6 mb-4">
-            <div class="card border-0" style="width: 33rem;">
+            <div class="card border-0" style="width: 35rem;">
               <img class="card img-top border-0" src="data:image/png;base64,{{ boxplot|safe }}">
             </div>
           </div>
@@ -165,7 +132,7 @@
           <h2>Sentiment Distribution</h2>
           <hr>
           <div class="col-md-6 mb-4">
-            <div class="card border-0" style="width: 27rem;" >
+            <div class="card border-0" style="width: 26rem;" >
               <img class="card img-top border-0" src="data:image/png;base64,{{ distribution|safe }}">
             </div>
           </div>
@@ -183,11 +150,11 @@
           <p></p> <!-- Spacer -->
           <h5 class="card-text">In general, the sentiment score lies in between -1 and +1:</h5>
           <p></p> <!-- Spacer -->
-          <h5 class="card-text">A tweet in between +1 and +0.05 is positive.</h5><br>
+          <h5 class="card-text">- A tweet in between +1 and +0.05 is positive.</h5><br>
           <p></p> <!-- Spacer -->
-          <h5 class="card-text">A tweet in between +0.05 and -0.05 is neutral.</h5><br>
+          <h5 class="card-text">- A tweet in between +0.05 and -0.05 is neutral.</h5><br>
           <p></p> <!-- Spacer -->
-          <h5 class="card-text">A tweet in between -0.05 and -1 is negative.</h5><br>
+          <h5 class="card-text">- A tweet in between -0.05 and -1 is negative.</h5><br>
           <p></p> <!-- Spacer -->
           <h5>Your sentiment score is {{sentiment_average}}, which means that people on Twitter are currently using {{sentiment_describe}} words associated with {{input_hashtag}}.</h5>
         </div>
@@ -253,6 +220,5 @@
       </div>
     </div>
 </div>
-
 
 {% endblock content%}

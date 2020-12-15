@@ -1,7 +1,6 @@
 import re
 import numpy as np
 import pandas as pd
-from textblob import TextBlob
 from google_trans_new import google_translator as Translator
 
 
@@ -11,6 +10,7 @@ This app cleans and adds all Tweets to a dataframe.
 
 
 def remove_pattern(input_txt, pattern):
+    # Checks for patterns stated in clean_tweets function
     r = re.findall(pattern, input_txt)
     for i in r:
         input_txt = re.sub(i, "", input_txt)
@@ -31,7 +31,7 @@ def clean_tweets(lst):
 
 class TweetToDataframe:
     """
-    Used for cleaning, analyzing and appending the tweets in a pandas dataframe.
+    Used for cleaning, analyzing, translating and appending the tweets in a pandas dataframe.
     """
 
     def tweets_to_data_frame(self, tweets):

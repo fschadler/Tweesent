@@ -1,9 +1,5 @@
 from wordcloud import WordCloud, STOPWORDS
 from .utils import get_plot, get_wordcloud, get_hashtagcloud, random_color_func, get_boxplot, get_distribution
-import numpy as np
-import matplotlib as plt
-import seaborn as sns
-import random
 
 """
 App to create charts which are displayed on the analysis.html page.  
@@ -30,6 +26,10 @@ def word_cloud_gen(df):
 def hashtag_cloud_gen(df):
     # Creates Word Cloud based on Hashtags in Tweets.
     hashtag_list_tweets = list(df["tweets"].str.findall(r"#(\w+)").sum())
+    # If function is used, when no hashtags are available in Tweets. Caused Error, therefore placeholder
+    if len(hashtag_list_tweets) == 0:
+        hashtag_list_tweets = ["No_Hashtag_in_Tweets"]
+    # if hashtag_list_tweets empty use input.req
     stopwords = set(STOPWORDS)
     all_hashtags = ' '.join([hashtag for hashtag in hashtag_list_tweets])
     z = WordCloud(background_color='white', stopwords=stopwords, width=1600, height=800, random_state=21,
@@ -37,12 +37,13 @@ def hashtag_cloud_gen(df):
 
     return get_hashtagcloud(z)
 
+
 def boxplot_gen(df):
-    #creates boxplot for sentiment-values
+    # Creates boxplot for sentiment-values
     b = (df["sentiment"])
     return get_boxplot(b)
 
 def distribution_gen(df):
-    #creates distribution graph
+    # Creates distribution graph
     d = df
     return get_distribution(d)

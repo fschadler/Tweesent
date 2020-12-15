@@ -6,6 +6,7 @@ from geopy import Nominatim
 
 """
 This app is used for authentication and filtering Tweets based on the user-input on the home-page. 
+And searching for Trends based on User-Input in Location Form. 
 """
 
 
@@ -39,17 +40,6 @@ class TwitterAuthenticator:
         return auth
 
 
-class TwitterStreamer:
-    def __init__(self):
-        self.twitter_authenticator = TwitterAuthenticator()
-
-    def stream_tweets(self, fetched_tweets_filename):
-        # This handles Twitter authentication and the connection to Twitter Streaming API
-        listener = TwitterListener(fetched_tweets_filename)
-        auth = self.twitter_authenticator.authenticate_twitter_app()
-        stream = tweepy.Stream(auth, listener)
-
-
 class TwitterListener(tweepy.StreamListener):
     """
     Class to print received tweets to stdout and closes connection if error occurs.
@@ -75,7 +65,7 @@ class TwitterListener(tweepy.StreamListener):
 
 
 """
-Displays the home.html where the user can input their hashtag and number of Tweets.
+Displays the home.html where the user can input their hashtag, number of Tweets and location.
 """
 
 
@@ -84,21 +74,25 @@ def show(request):
     num_form = NumForm()
     location = LocationForm()
 
+    # Checks whether location was submitted and renders the result, otherwise just displays standard home.html
     if request.POST.get("input_location") != None:
         input_location = request.POST.get("input_location")
         geolocator = Nominatim(user_agent="TweetAnalyser")
+        # Looks for location based on input
         loc = geolocator.geocode(input_location)
         twitter_client = TwitterClient()
         api = twitter_client.get_twitter_client_api()
         location_data = api.trends_closest(loc.latitude, loc.longitude)
+        # Where on earth ID based on Tweets
         woeid = location_data[0]["woeid"]
+        # List of top 10
         top10_trends = []
         try:
             trends_results = api.trends_place(woeid)
             for trend in trends_results[0]["trends"][:10]:
                 top10_trends.append(trend["name"])
         except tweepy.error.TweepError:
-            print("There are no trending topics in your location.")
+            return render(request, 'home.html', {'hashtag_form': hashtag_form, "num_form": num_form, 'location': location})
         return render(request, 'home.html', {'hashtag_form': hashtag_form, "num_form": num_form, 'location': location,
                                              'input_location': input_location, 'top10_trends': top10_trends})
     else:
