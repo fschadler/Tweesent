@@ -22,7 +22,6 @@ def get_graph():
 def get_plot(x):
     plt.switch_backend("AGG")
     plt.figure(figsize=(6.4, 4.8))
-    plt.title("Distribution of Sentiment")
     plt.pie(x, labels=["positve","neutral","negative"],colors=("#4caf50","#2196f3","#f44336"),autopct='%1.1f%%')
 
     graph = get_graph()
@@ -56,7 +55,7 @@ def random_color_func(word=None, font_size=None, position=None,  orientation=Non
 def get_boxplot(b):
     plt.switch_backend("AGG")
     plt.figure(figsize=(6.4,4.8))
-    plt.title("Distribution of Sentiment")
+    plt.axis("on")
     plt.boxplot(b)
     boxplot = get_graph()
     return boxplot

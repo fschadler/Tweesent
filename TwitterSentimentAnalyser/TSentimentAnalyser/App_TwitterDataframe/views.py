@@ -5,7 +5,6 @@ from textblob import TextBlob
 from google_trans_new import google_translator as Translator
 
 
-
 """
 This app cleans and adds all Tweets to a dataframe.
 """
@@ -34,9 +33,6 @@ class TweetToDataframe:
     """
     Used for cleaning, analyzing and appending the tweets in a pandas dataframe.
     """
-
-#    def clean_tweet(self, tweet):
-#        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
     def tweets_to_data_frame(self, tweets):
         df = pd.DataFrame(data=[tweet.text for tweet in tweets], columns=['tweets'])
