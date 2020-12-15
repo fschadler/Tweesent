@@ -60,7 +60,7 @@ def random_color_func(word=None, font_size=None, position=None,  orientation=Non
 def get_boxplot(b):
     # Defines settings for Boxplot generation
     plt.switch_backend("AGG")
-    sns.boxplot(x="sentiment", data=b, orient='v', width=0.6)
+    sns.boxplot(y="sentiment", data=b, width=0.6)
     boxplot = get_graph()
     return boxplot
 
