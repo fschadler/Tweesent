@@ -40,7 +40,7 @@ def hashtag_cloud_gen(df):
 
 def boxplot_gen(df):
     # Creates boxplot for sentiment-values
-    b = (df["sentiment"])
+    b = df
     return get_boxplot(b)
 
 def distribution_gen(df):
