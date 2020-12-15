@@ -1,7 +1,8 @@
 from wordcloud import WordCloud, STOPWORDS
-from .utils import get_plot, get_wordcloud, get_hashtagcloud, random_color_func, get_boxplot
+from .utils import get_plot, get_wordcloud, get_hashtagcloud, random_color_func, get_boxplot, get_distribution
 import numpy as np
 import matplotlib as plt
+import seaborn as sns
 import random
 
 """
@@ -40,3 +41,8 @@ def boxplot_gen(df):
     #creates boxplot for sentiment-values
     b = (df["sentiment"])
     return get_boxplot(b)
+
+def distribution_gen(df):
+    #creates distribution graph
+    d = df
+    return get_distribution(d)

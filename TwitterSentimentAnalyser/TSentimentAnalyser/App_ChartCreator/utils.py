@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 import base64
 from io import BytesIO
 
@@ -59,3 +60,11 @@ def get_boxplot(b):
     plt.boxplot(b)
     boxplot = get_graph()
     return boxplot
+
+def get_distribution(d):
+    plt.switch_backend("AGG")
+    plt.figure(figsize=(6.4, 4.8))
+    plt.title("Distribution of Sentiment")
+    sns.displot(data=d, x="sentiment", kde=True)
+    distribution = get_graph()
+    return distribution

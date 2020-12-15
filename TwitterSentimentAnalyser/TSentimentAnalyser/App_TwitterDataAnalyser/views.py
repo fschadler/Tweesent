@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from App_TwitterDataCollector.views import TwitterClient
 from App_TwitterDataframe.views import TweetToDataframe
-from App_ChartCreator.views import pie_chart_gen, hashtag_cloud_gen, word_cloud_gen, boxplot_gen
+from App_ChartCreator.views import pie_chart_gen, hashtag_cloud_gen, word_cloud_gen, boxplot_gen, distribution_gen
 import numpy as np
 import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -76,6 +76,7 @@ def analysis(request):
     hashtag_cloud = hashtag_cloud_gen(df)
     chart = pie_chart_gen(count_positive, count_neutral, count_negative)
     boxplot = boxplot_gen(df)
+    distribution = distribution_gen(df)
 
 
     if request.method == 'POST':
@@ -85,8 +86,9 @@ def analysis(request):
                                                    "count_positive": count_positive, "count_neutral": count_neutral,
                                                    "count_negative": count_negative, "min_sentiment": min_sentiment,
                                                    "max_sentiment": max_sentiment, "std_sentiment": std_sentiment,
-                                                    "word_cloud": word_cloud, "hashtag_cloud": hashtag_cloud, "chart": chart,
-                                                    "boxplot": boxplot, "sentiment_describe": sentiment_describe})
+                                                    "word_cloud": word_cloud, "hashtag_cloud": hashtag_cloud,
+                                                    "chart": chart, "boxplot": boxplot, "distribution": distribution,
+                                                    "sentiment_describe": sentiment_describe})
 
 def Contact(request):
     return render(request, 'Contact.html', {})
