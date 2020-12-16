@@ -39,12 +39,17 @@ def analysis(request):
     """
     # Creates a slimmer Dataframe Table for the Output Page
     df_short = df[["html_ready_tweets", "sentiment"]]
+    # Renaming columns for the analysis page
+    df_short = (df_short.rename(columns={'html_ready_tweets': 'Tweets', 'sentiment': 'Sentiment Score'}))
+    # Transforms dataframe to html
     df_short_html = df_short.to_html(classes="table table-borderless table-hover table-striped", border=0,
                                      justify="left")
 
     # Dataframe which shows the top 5 Tweeters within the pulled data, based on highest follower count.
     df_top = df[["user_screen_name", "follower_count"]].nlargest(5, "follower_count")
+    # Renaming columns for the analysis page
     df_top = (df_top.rename(columns={'user_screen_name': 'Username', 'follower_count': 'Follower Count'}))
+    # Transforms dataframe to html
     df_top_html = df_top.to_html(classes="table table-borderless table-hover table-striped", index=False, border=0,
                                  justify="left")
 
