@@ -26,7 +26,18 @@ def clean_tweets(lst):
     lst = np.vectorize(remove_pattern)(lst, "https?://[A-Za-z0-9./]*")
     # remove special characters, numbers, punctuations (except for #)
     lst = np.core.defchararray.replace(lst, "[^a-zA-Z#]", " ")
+    # remove "\n" from Tweets
+    lst = np.core.defchararray.replace(lst, "\n", " ")
     return lst
+
+def clean_for_html(lst):
+    # remove URL links (httpxxx)
+    lst = np.vectorize(remove_pattern)(lst, "https?://[A-Za-z0-9./]*")
+
+    # remove "\n" from Tweets
+    lst = np.core.defchararray.replace(lst, "\n", " ")
+    return lst
+
 
 
 class TweetToDataframe:
@@ -50,4 +61,5 @@ class TweetToDataframe:
         df["english_tweets"] = df["english_tweets"].astype("str")
         df["cleaned_tweets"] = df["tweets"].map(lambda x: clean_tweets(x))
         df["cleaned_english_tweets"] = df["english_tweets"].map(lambda x: clean_tweets(x))
+        df["html_ready_tweets"] = df["english_tweets"].map(lambda x: clean_for_html(x))
         return df

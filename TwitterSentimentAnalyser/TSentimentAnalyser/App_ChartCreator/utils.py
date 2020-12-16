@@ -60,9 +60,7 @@ def random_color_func(word=None, font_size=None, position=None,  orientation=Non
 def get_boxplot(b):
     # Defines settings for Boxplot generation
     plt.switch_backend("AGG")
-    plt.figure(figsize=(6.4,4.8))
-    plt.axis("on")
-    plt.boxplot(b)
+    sns.boxplot(y="sentiment", data=b, width=0.6)
     boxplot = get_graph()
     return boxplot
 
@@ -70,6 +68,6 @@ def get_distribution(d):
     # Defines settings for Distribution Chart gen
     # Switching backend due to usage of seaborn
     plt.switch_backend("AGG")
-    sns.displot(data=d, x="sentiment", kde=True)
+    sns.histplot(data=d, x="sentiment", bins=20, kde=True)
     distribution = get_graph()
     return distribution

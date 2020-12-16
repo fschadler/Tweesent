@@ -10,3 +10,4 @@ google_trans_new
 wordcloud
 openpyxl
 seaborn
+django-countries
