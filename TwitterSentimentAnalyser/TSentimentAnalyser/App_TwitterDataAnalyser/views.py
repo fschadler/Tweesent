@@ -24,8 +24,7 @@ def analysis(request):
     # Importing analyzer from vaderSentiment
     analyzer = SentimentIntensityAnalyzer()
 
-    # Creates Dataframe Excel File
-    path = (os.path.join(Path(__file__).resolve().parent.parent, "static/raw_tweets.xlsx"))
+    # Creates Dataframe Excel File. Using os to find correct path as it used to cause issues only using a static path.
     df.to_excel(os.path.join(Path(__file__).resolve().parent.parent, "static/raw_tweets.xlsx"))
 
     """
