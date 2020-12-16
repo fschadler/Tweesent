@@ -21,9 +21,7 @@ The sentiment-score lies in between -1 and +1 and is classified as follows:
 
 * A tweet in between -0.05 and -1 is negative.
 
-Check the VADER Github page for more information how the score is calculated:
-https://github.com/cjhutto/vaderSentiment
-
+Check the [vaderSentiment] Github page for more information how the score is calculated.
 
 #### To run on your local machine:
 
@@ -34,3 +32,4 @@ https://github.com/cjhutto/vaderSentiment
 
 <!-- Markdown link & img dfn's -->
 [build-img]: https://img.shields.io/badge/build-passing-brightgreen
+[vaderSentiment]: https://github.com/cjhutto/vaderSentiment
