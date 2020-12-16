@@ -12,6 +12,7 @@ import os
 Class to create variables and dataframes which are rendered on the output page. 
 """
 
+
 def analysis(request):
     """
     Importing App_TwitterDataFrame
