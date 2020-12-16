@@ -146,3 +146,18 @@ COUNTRIES_FIRST_SORT = True
 COUNTRIES_FIRST_REPEAT = True
 
 COUNTRIES_FIRST_BREAK = '-----------'
+
+COUNTRIES_FIRST = [
+    'US',
+    'GB',
+    'DE',
+    'CH',
+    'LI',
+    'AT'
+]
+
+COUNTRIES_FIRST_SORT = True
+
+COUNTRIES_FIRST_REPEAT = True
+
+COUNTRIES_FIRST_BREAK = '-----------'
