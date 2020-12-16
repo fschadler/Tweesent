@@ -7,12 +7,8 @@
 
 On the homepage the user is able to get the top 10 latest Twitter trends based on the submitted location as well as the possibility to input a desired search-term or #hashtag and the number of tweets one would like to fetch. A maximum of 500 tweets is accepted to search per request. 
 
-(Screenshot maybe)
-
 Once submitted, the desired amount of tweets is streamed from twitter in real-time. The fetched tweets are then cleaned, translated to English and analysed through VADER to appoint them a sentiment-score.
 In a next step the most used words and hashtags are displayed in a word cloud and the data gets visualized with graphs.
-
-(screenshot)
 
 The sentiment-score lies in between -1 and +1 and is classified as follows:
 
