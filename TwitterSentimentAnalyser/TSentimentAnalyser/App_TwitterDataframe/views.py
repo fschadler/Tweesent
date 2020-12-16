@@ -5,7 +5,7 @@ from google_trans_new import google_translator as Translator
 
 
 """
-This app cleans and adds all Tweets to a dataframe.
+This app cleans, translates and adds all Tweets to a dataframe.
 """
 
 
@@ -42,7 +42,7 @@ def clean_for_html(lst):
 
 class TweetToDataframe:
     """
-    Used for cleaning, analyzing, translating and appending the tweets in a pandas dataframe.
+    Used for cleaning, translating and appending the tweets in a pandas dataframe.
     """
 
     def tweets_to_data_frame(self, tweets):

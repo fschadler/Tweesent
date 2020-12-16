@@ -25,7 +25,7 @@ def analysis(request):
     analyzer = SentimentIntensityAnalyzer()
 
     # Creates Dataframe Excel File. Using os to find correct path as it used to cause issues only using a static path.
-    df.to_excel(os.path.join(Path(__file__).resolve().parent.parent, "static/raw_tweets.xlsx"))
+    df.to_excel(os.path.join(Path(__file__).resolve().parent.parent, "static/xlsx/raw_tweets.xlsx"))
 
     """
     Adding the sentiment Score to the Dataframe based on cleaned and translated Tweets

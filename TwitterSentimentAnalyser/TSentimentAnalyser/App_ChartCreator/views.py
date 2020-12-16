@@ -43,6 +43,7 @@ def boxplot_gen(df):
     b = df
     return get_boxplot(b)
 
+
 def distribution_gen(df):
     # Creates distribution graph
     d = df

@@ -15,12 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from App_TwitterDataCollector.views import show
+from App_TwitterDataCollector.views import home
 from App_TwitterDataAnalyser.views import analysis, contact, faq
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', show),
+    path('', home),
     path('analysis', analysis),
     path('Contact', contact),
     path('FAQ', faq),

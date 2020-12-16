@@ -10,6 +10,16 @@ And searching for Trends based on User-Input in Location Form.
 """
 
 
+class TwitterAuthenticator:
+    """
+    Class to authenticate based on entries in twitter_credentials.
+    """
+    def authenticate_twitter_app(self):
+        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+        auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+        return auth
+
+
 class TwitterClient:
     """
     Uses Authenticator Class to pull tweets based on user input.
@@ -30,46 +40,12 @@ class TwitterClient:
         return tweets
 
 
-class TwitterAuthenticator:
-    """
-    Class to authenticate based on entries in twitter_credentials.
-    """
-    def authenticate_twitter_app(self):
-        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-        auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-        return auth
-
-
-class TwitterListener(tweepy.StreamListener):
-    """
-    Class to print received tweets to stdout and closes connection if error occurs.
-    """
-    def __init__(self, fetched_tweets_filename):
-        self.fetched_tweets_filename = fetched_tweets_filename
-
-    def on_data(self, data):
-        try:
-            print(data)
-            with open(self.fetched_tweets_filename, 'a') as tf:
-                tf.write(data)
-            return True
-        except BaseException as e:
-            print("Error on_data %s" % str(e))
-        return True
-
-    def on_error(self, status):
-        if status == 420:
-            # Returning False on_data method in case rate limit occurs.
-            return False
-        print(status)
-
-
 """
-Displays the home.html where the user can input their hashtag, number of Tweets and location.
+Displays the home.html and forms where the user can input their hashtag, number of Tweets and location.
 """
 
 
-def show(request):
+def home(request):
     hashtag_form = HashtagForm()
     num_form = NumForm()
     location = LocationForm()
