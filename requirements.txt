@@ -11,4 +11,3 @@ wordcloud
 openpyxl
 seaborn
 django-countries
-django-countries

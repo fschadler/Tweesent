@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cities_light',
     'django_countries',
 #Selfmade Apps
     "App_TwitterDataAnalyser",
@@ -131,21 +130,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
-COUNTRIES_FIRST = [
-    'US',
-    'GB',
-    'DE',
-    'CH',
-    'LI',
-    'AT'
-]
-
-COUNTRIES_FIRST_SORT = True
-
-COUNTRIES_FIRST_REPEAT = True
-
-COUNTRIES_FIRST_BREAK = '-----------'
 
 COUNTRIES_FIRST = [
     'US',

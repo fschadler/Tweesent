@@ -33,7 +33,3 @@ Check the [vaderSentiment] Github page for more information how the score is cal
 <!-- Markdown link & img dfn's -->
 [build-img]: https://img.shields.io/badge/build-passing-brightgreen
 [vaderSentiment]: https://github.com/cjhutto/vaderSentiment
-
-<!-- Markdown link & img dfn's -->
-[build-img]: https://img.shields.io/badge/build-passing-brightgreen
-[vaderSentiment]: https://github.com/cjhutto/vaderSentiment
