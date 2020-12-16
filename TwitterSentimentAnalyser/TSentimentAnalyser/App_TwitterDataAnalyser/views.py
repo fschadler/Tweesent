@@ -35,7 +35,7 @@ def analysis(request):
     Dataframes for HTML: 
     """
     # Creates a slimmer Dataframe Table for the Output Page
-    df_short = df[["tweets", "sentiment"]]
+    df_short = df[["html_ready_tweets", "sentiment"]]
     df_short_html = df_short.to_html(classes="table table-borderless table-hover table-striped", border=0,
                                      justify="left")
 
