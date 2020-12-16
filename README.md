@@ -1,5 +1,5 @@
 ![Tweesent](TwitterSentimentAnalyser/TSentimentAnalyser/static/images/Banner.png)
-### Tweesent
+#### Tweesent
 
 > This Django web application is used to generate a sentiment-score of tweets, descriptive statistics and data visualisations based on user input.
 
