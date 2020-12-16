@@ -40,7 +40,7 @@ def analysis(request):
     # Creates a slimmer Dataframe Table for the Output Page
     df_short = df[["html_ready_tweets", "sentiment"]]
     # Renaming columns for the analysis page
-    df_short = (df_short.rename(columns={'html_ready_tweets': 'Tweets', 'sentiment': 'Sentiment Score'}))
+    df_short = (df_short.rename(columns={'html_ready_tweets': 'Tweets', 'sentiment': 'Sentiment'}))
     # Transforms dataframe to html
     df_short_html = df_short.to_html(classes="table table-borderless table-hover table-striped", border=0,
                                      justify="left")
